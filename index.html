@@ -1,75 +1,208 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CrickHD Live App</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Own Your Cricket Streaming App + API (Android & iOS)</title>
+  <meta name="description" content="Do you want your own Cricket streaming app with API? We build Android & iOS for ₹8,499 (~$100). Private API included with purchase. AdMob, OneSignal, Amplitude, Firebase, Wistia highlights." />
+  <link rel="icon" href="assets/favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(135deg, #0a0f2c, #1a2a6c, #b21f1f, #fdbb2d);
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
-      color: white;
-      text-align: center;
+    :root{
+      --bg:#f6fbfa; --surface:#ffffff; --ink:#0b221f; --muted:#4b6a67; --line:#d9eeea;
+      --brand:#00c9a9; --brand2:#38ef7d; --brand3:#00e7ce; --shadow:0 10px 30px rgba(0,0,0,.06);
+      --ring: 0 0 0 3px rgba(0, 233, 200, .15);
     }
-
-    @keyframes gradientBG {
-      0% {background-position: 0% 50%;}
-      50% {background-position: 100% 50%;}
-      100% {background-position: 0% 50%;}
-    }
-
-    header {
-      padding: 60px 20px 30px;
-    }
-
-    header h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-    }
-
-    header p {
-      font-size: 1.2rem;
-      opacity: 0.8;
-    }
-
-    .download-btn {
-      display: inline-block;
-      margin-top: 30px;
-      padding: 15px 30px;
-      background: #ff5722;
-      color: #fff;
-      font-size: 1.2rem;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: background 0.3s;
-    }
-
-    .download-btn:hover {
-      background: #e64a19;
-    }
-
-    footer {
-      margin-top: 80px;
-      padding: 20px;
-      font-size: 0.9rem;
-      opacity: 0.7;
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Outfit',system-ui,Segoe UI,Roboto,sans-serif}
+    a{color:var(--ink); text-decoration:none}
+    .container{width:min(1200px,92vw); margin-inline:auto}
+    .blob-a,.blob-b{position:fixed;z-index:-1; filter:blur(60px); opacity:.45; pointer-events:none}
+    .blob-a{width:420px;height:420px;left:-120px;top:-120px;background:radial-gradient(closest-side,#9cffec,transparent)}
+    .blob-b{width:520px;height:520px;right:-160px;bottom:-160px;background:radial-gradient(closest-side,#b7ffd1,transparent)}
+    header{position:sticky; top:0; backdrop-filter:blur(8px); background:#ffffffcc; border-bottom:1px solid var(--line); z-index:50}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:12px}
+    .brand{display:flex;gap:10px;align-items:center;font-weight:900}
+    .brand img{width:28px;height:28px}
+    .btn{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:14px;font-weight:800;border:1px solid #bfeee6;background:#fff;color:var(--ink);transition:.2s ease; box-shadow: var(--shadow)}
+    .btn:hover{transform:translateY(-1px)}
+    .btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand2)); color:#043a31; border:0; box-shadow:0 12px 30px rgba(0, 217, 180, .25)}
+    .btn.ghost{background:#fff}
+    .pulse{animation:pulse 1.8s infinite}
+    @keyframes pulse {0%{box-shadow:var(--ring)}70%{box-shadow:0 0 0 20px rgba(0, 233, 200, 0)}100%{box-shadow:0 0 0 0 rgba(0, 233, 200, 0)}}
+    .hero{padding:clamp(26px,6vw,72px) 0 16px}
+    .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(16px,4vw,36px)}
+    .h1{font-size:clamp(2rem,3.6vw,3.4rem);line-height:1.04;margin:0 0 8px;font-weight:900}
+    .grad{background:linear-gradient(90deg,#00cab2,#45f593); -webkit-background-clip:text; background-clip:text; color:transparent}
+    .lead{color:#325450; font-size:clamp(1rem,1.6vw,1.2rem); margin:10px 0 18px}
+    .hero-card{position:relative;padding:20px;border:1px solid var(--line);background:var(--surface);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+    .offer{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 12px}
+    .offer .tag{background:#f7fffd;border:1px solid #c8f6ee;color:#086258;border-radius:999px;padding:6px 10px;font-size:.9rem}
+    .offer .hot{background:linear-gradient(120deg,#ffe8a3,#ffd36e);color:#3a2a00;border:0}
+    .check{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;margin:12px 0 18px}
+    .check span{display:flex;gap:10px;align-items:flex-start;color:#456b66}
+    .tick{width:18px;height:18px;border-radius:5px;background:linear-gradient(135deg,var(--brand),var(--brand2));display:inline-grid;place-items:center;color:#063d34;font-weight:900;font-size:.8rem}
+    .showcase{display:grid;gap:12px;grid-template-columns:1fr}
+    .card-media{border-radius:18px;background:#fff;padding:10px;border:1px solid var(--line);box-shadow:var(--shadow)}
+    .card-media img{display:block;width:100%;height:auto;border-radius:12px}
+    .stripe{height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin:26px 0}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .tile{border:1px solid var(--line);border-radius:16px;background:#ffffff;box-shadow:var(--shadow);padding:14px}
+    .tile h3{margin:6px 0}
+    .tile p{color:#456b66;margin:6px 0}
+    .pricing{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .plan{border-radius:18px;border:1px solid var(--line);background:#ffffff;box-shadow:var(--shadow);padding:18px}
+    .price{font-size:2rem;font-weight:900;margin:6px 0;color:#0b3e35}
+    .incl li{color:#456b66;margin:6px 0}
+    .sticky-cta{position:sticky;bottom:0;z-index:60;backdrop-filter:blur(8px) saturate(140%);background:#ffffffcc;border-top:1px solid var(--line)}
+    .sticky-cta .inner{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:8px 0}
+    .float-wa{position:fixed;right:16px;bottom:16px;display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--brand),var(--brand2));color:#043a31;border-radius:999px;padding:12px 16px;font-weight:900;border:0;box-shadow:0 8px 30px rgba(0, 217, 180, .3)}
+    .float-wa:hover{transform:translateY(-2px)}
+    footer{padding:40px 0 60px;color:#4a6a67;font-size:.95rem}
+    .disclaimer{font-size:.85rem;color:#5a7d79}
+    .reveal{opacity:0;transform:translateY(14px);transition:all .5s ease}
+    .reveal.in{opacity:1;transform:none}
+    @media(max-width:980px){
+      .hero-grid{grid-template-columns:1fr}
+      .grid-3{grid-template-columns:1fr}
+      .pricing{grid-template-columns:1fr}
+      .check{grid-template-columns:1fr}
     }
   </style>
 </head>
 <body>
+  <div class="blob-a"></div><div class="blob-b"></div>
+
   <header>
-    <h1>CrickHD Live App</h1>
-    <p>Watch live cricket streams anytime, anywhere.</p>
-    <!-- Replace APK link below with your real file -->
-    <a href="https://your-apk-link.com/app.apk" class="download-btn">Download APK</a>
+    <div class="container nav">
+      <div class="brand"><img src="assets/favicon.png" alt="logo"/><span>Cricket LIVE</span></div>
+      <div class="cta">
+        <a class="btn" href="get-app.html">Get App</a>
+        <a class="btn ghost" href="#showcase">Screens</a>
+        <a class="btn primary pulse" href="#contact">Order Now</a>
+      </div>
+    </div>
   </header>
 
-  <footer>
-    &copy; 2025 CrickHD.live — All rights reserved.
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-card reveal">
+        <h1 class="h1">Own your <span class="grad">Cricket Streaming App</span> with API.</h1>
+        <p class="lead">We build your Android & iOS app for <b>₹8,499</b> (~$100). Clean UI, fast video, and tools to grow.</p>
+        <div class="offer">
+          <span class="tag">1 month maintenance free</span>
+          <span class="tag">Private API included (no free trial)</span>
+        </div>
+        <div class="check">
+          <span><i class="tick">✓</i> AdMob: banner, interstitial, rewarded</span>
+          <span><i class="tick">✓</i> OneSignal push & in-app messages</span>
+          <span><i class="tick">✓</i> Amplitude + Firebase Analytics</span>
+          <span><i class="tick">✓</i> Highlights via Wistia (10 uploads)</span>
+          <span><i class="tick">✓</i> Live match cards & image slider</span>
+          <span><i class="tick">✓</i> Store-ready brand assets</span>
+        </div>
+        <div class="cta">
+          <a href="#pricing" class="btn primary">See Pricing</a>
+          <a href="assets/sample-app.apk" class="btn" download>Download Sample APK</a>
+        </div>
+        <p class="disclaimer" style="margin-top:10px">Use the API only with streams you have rights to (HLS/DASH). We do not provide TV rights.</p>
+      </div>
+      <div id="showcase" class="showcase reveal">
+        <div class="card-media"><img src="assets/showcase-1.webp" alt="App screen 1"/></div>
+        <div class="card-media"><img src="assets/showcase-2.webp" alt="App screen 2"/></div>
+        <div class="card-media"><img src="assets/showcase-3.webp" alt="App screen 3"/></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="stripe container"></div>
+
+  <section class="container reveal">
+    <div class="grid-3">
+      <div class="tile">
+        <h3>Why people buy</h3>
+        <p>Own your brand. Control the UI. Add your matches and highlights. Push alerts bring users back.</p>
+      </div>
+      <div class="tile">
+        <h3>What you get</h3>
+        <ul class="incl">
+          <li>Android & iOS builds + assets</li>
+          <li>AdMob, OneSignal, Amplitude, Firebase setup</li>
+          <li>Wistia highlights (10 free uploads)</li>
+          <li>Private API access with purchase</li>
+        </ul>
+      </div>
+      <div class="tile">
+        <h3>Fast delivery</h3>
+        <p>Simple onboarding on WhatsApp. We guide you step by step till your first release.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="stripe container"></div>
+
+  <section class="container pricing" id="pricing">
+    <div class="plan reveal">
+      <h2 style="margin:0">Full App Build</h2>
+      <div class="price">₹8,499 <span style="font-size:1rem; color:#5a7d79">(~$100)</span></div>
+      <ul class="incl">
+        <li>Android + iOS builds</li>
+        <li>Branding, icons, theming</li>
+        <li>AdMob, OneSignal, Analytics setup</li>
+        <li>Highlights (Wistia 10 videos)</li>
+        <li><b>Private API</b> access included</li>
+        <li>1 month maintenance free</li>
+      </ul>
+      <div class="cta">
+        <a class="btn primary" href="#contact">Order on WhatsApp</a>
+        <a class="btn ghost" href="assets/sample-app.apk" download>Try Sample APK</a>
+      </div>
+    </div>
+    <div class="plan reveal">
+      <h2 style="margin:0">Monthly API Plan</h2>
+      <div class="price">₹850 / month <span style="font-size:1rem; color:#5a7d79">(~$10)</span></div>
+      <ul class="incl">
+        <li>Use the API with your app</li>
+        <li>Live card & slider management</li>
+        <li>Manual highlight uploads</li>
+        <li>Basic usage dashboard</li>
+      </ul>
+      <p class="disclaimer">No free trial. Cancel anytime.</p>
+    </div>
+  </section>
+
+  <div class="sticky-cta">
+    <div class="container inner">
+      <div><b>Ready?</b> Build your own app + API.</div>
+      <div class="cta">
+        <a class="btn primary" href="#contact">Order Now</a>
+        <a class="btn ghost" href="assets/sample-app.apk" download>Sample APK</a>
+      </div>
+    </div>
+  </div>
+
+  <section class="container reveal" id="contact" style="padding:18px 0 0 0">
+    <h2>Talk to us</h2>
+    <p class="lead">Click Order Now to connect on WhatsApp Business. We will guide you step by step.</p>
+    <div class="cta">
+      <a class="btn primary pulse" href="https://wa.me/91XXXXXXXXXX">Order Now (WhatsApp)</a>
+      <a class="btn ghost" href="mailto:hello@example.com">Email</a>
+    </div>
+  </section>
+
+  <a class="float-wa" href="https://wa.me/91XXXXXXXXXX" aria-label="Chat on WhatsApp">Chat on WhatsApp</a>
+
+  <footer class="container">
+    <div class="stripe"></div>
+    <div>© 2025 Cricket Live. For demonstration and marketing only.</div>
   </footer>
+
+  <script>
+    const els = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=> e.isIntersecting && e.target.classList.add('in'));
+    }, {threshold:.12});
+    els.forEach(el=>io.observe(el));
+  </script>
 </body>
 </html>
