@@ -3,9 +3,46 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Get the App — Android APK, iOS, and API</title>
+
+  <title>Download Cricket Streaming App (Android APK) + Private API</title>
+  <meta name="description" content="Download the Cricket Streaming Android APK (arm64, v7a, x86_64). Live cricket matches & highlights. Private API available. Build your own branded app for $100.">
+
+  <!-- Canonical & indexing -->
+  <link rel="canonical" href="https://app.crickgd.live/get-app.html" />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+
+  <!-- Brand -->
   <link rel="icon" href="assets/favicon.png" />
+  <meta name="theme-color" content="#00c9a9" />
+  <meta name="author" content="Cricket Live" />
+
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://app.crickgd.live/get-app.html" />
+  <meta property="og:title" content="Download Cricket Streaming App (Android APK)" />
+  <meta property="og:description" content="Live cricket streaming & highlights. Get the Android APK (arm64, v7a, x86_64) and subscribe to the private API." />
+  <meta property="og:image" content="https://app.crickgd.live/assets/og-cover.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Download Cricket Streaming App (Android APK)" />
+  <meta name="twitter:description" content="Live cricket streaming & highlights. Get the Android APK and optional private API." />
+  <meta name="twitter:image" content="https://app.crickgd.live/assets/og-cover.jpg" />
+
+  <!-- Hreflang -->
+  <link rel="alternate" hreflang="en-LK" href="https://app.crickgd.live/get-app.html" />
+  <link rel="alternate" hreflang="en-IN" href="https://app.crickgd.live/get-app.html" />
+  <link rel="alternate" hreflang="x-default" href="https://app.crickgd.live/get-app.html" />
+
+  <!-- Google Search Console (verify) -->
+  <!-- Replace the content value after adding site in search console -->
+  <meta name="google-site-verification" content="YOUR_SEARCH_CONSOLE_CODE_HERE" />
+
   <style>
     :root{
       --bg:#f6fbfa; --surface:#ffffff; --ink:#0b221f; --muted:#4b6a67; --line:#d9eeea;
@@ -15,7 +52,9 @@
     html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Outfit',system-ui,Segoe UI,Roboto,sans-serif}
     a{color:var(--ink);text-decoration:none}
     .container{width:min(1100px,92vw); margin-inline:auto}
-    header{position:sticky;top:0;background:#ffffffcc;backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:50}
+
+    header{position:sticky;top:0;background:#ffffffcc;backdrop-filter:blur(8px);
+           border-bottom:1px solid var(--line);z-index:50}
     .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
     .brand{display:flex;gap:10px;align-items:center;font-weight:900}
     .brand img{width:28px;height:28px}
@@ -23,7 +62,8 @@
     .btn{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:14px;font-weight:800;border:1px solid #bfeee6;background:#fff;box-shadow:var(--shadow);transition:.2s}
     .btn:hover{transform:translateY(-2px);box-shadow:0 15px 30px rgba(0,0,0,.1)}
     .btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#043a31;border:0;box-shadow:0 12px 30px rgba(0,217,180,.25)}
-    .hero{padding: clamp(24px,6vw,60px) 0 40px;position:relative;overflow:hidden}
+
+    .hero{padding: clamp(24px,6vw,60px) 0 40px}
     .hero .wrap{display:grid;grid-template-columns: .9fr 1.1fr; gap: clamp(12px,4vw,28px);align-items:center}
     .card{border:1px solid var(--line);background:#fff;border-radius:18px;padding:22px;box-shadow:var(--shadow)}
     .title{font-size:clamp(1.4rem,2.2vw,2rem);margin:0 0 8px;font-weight:900}
@@ -34,42 +74,128 @@
     .phone-mockups img:nth-child(2){transform:rotate(6deg) translateY(20px)}
     .phone-mockups img:hover{transform:scale(1.05)}
     .stripe{height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin:24px 0}
-    .tile{border:1px solid var(--line);background:#fff;border-radius:18px;padding:18px;box-shadow:var(--shadow);display:grid;gap:8px;justify-items:start}
+
     .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
-    .hint{font-size:.92rem;color:#4b6a67}
+    .tile{border:1px solid var(--line);background:#fff;border-radius:18px;padding:18px;box-shadow:var(--shadow);display:grid;gap:10px}
+    .tile .meta{font-size:.92rem;color:#4b6a67}
+    .hash{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.82rem; word-break:break-all; color:#325450}
+    .badge{display:inline-block; font-size:.78rem; padding:4px 8px; border-radius:10px; background:#f7fffd; border:1px solid #c8f6ee; color:#086258}
+
+    .faq{display:grid;gap:16px}
+    .q{font-weight:800}
+    .a{color:#456b66}
+
     footer{padding:30px 0 50px;color:#4a6a67;text-align:center}
-    @media(max-width:980px){ 
-      .hero .wrap{grid-template-columns:1fr;text-align:center} 
+
+    @media(max-width:980px){
+      .hero .wrap{grid-template-columns:1fr;text-align:center}
       .phone-mockups{flex-direction:column;align-items:center}
       .grid{grid-template-columns:1fr}
     }
   </style>
+
+  <!-- JSON-LD: WebSite with SearchAction (lets Google show sitelinks search box) -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebSite",
+    "url":"https://app.crickgd.live/",
+    "name":"Cricket Live",
+    "potentialAction":{
+      "@type":"SearchAction",
+      "target":"https://www.google.com/search?q=site:app.crickgd.live+{search_term_string}",
+      "query-input":"required name=search_term_string"
+    }
+  }
+  </script>
+
+  <!-- JSON-LD: Organization -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"Cricket Live",
+    "url":"https://app.crickgd.live/",
+    "logo":"https://app.crickgd.live/assets/favicon.png",
+    "sameAs":[
+      "https://github.com/samaraEdirisooriya/crichd_api"
+    ],
+    "contactPoint":[{
+      "@type":"ContactPoint",
+      "telephone":"+94-78-733-6580",
+      "contactType":"customer service",
+      "areaServed":"LK",
+      "availableLanguage":["en","si","ta"]
+    }]
+  }
+  </script>
+
+  <!-- JSON-LD: SoftwareApplication (3 APK variants) -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"SoftwareApplication",
+    "name":"Cricket Streaming App",
+    "operatingSystem":"Android",
+    "applicationCategory":"EntertainmentApplication",
+    "offers":{
+      "@type":"Offer",
+      "price":"0",
+      "priceCurrency":"USD"
+    },
+    "downloadUrl":"https://github.com/samaraEdirisooriya/crichd_api/releases",
+    "softwareVersion":"v1.0.0",
+    "fileSize":"22.1 MB",
+    "aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"21"},
+    "alternateName":"Cricket Live",
+    "releaseNotes":"Initial public release with arm64, v7a and x86_64 builds.",
+    "additionalProperty":[
+      {"@type":"PropertyValue","name":"arm64-v8a","value":"https://github.com/samaraEdirisooriya/crichd_api/releases/download/v1.0.0/cricket_app-arm64.apk"},
+      {"@type":"PropertyValue","name":"armeabi-v7a","value":"https://github.com/samaraEdirisooriya/crichd_api/releases/download/v1.0.0/cricket_app-v7a.apk"},
+      {"@type":"PropertyValue","name":"x86_64","value":"https://github.com/samaraEdirisooriya/crichd_api/releases/download/v1.0.0/cricket_app-x86_64.apk"}
+    ]
+  }
+  </script>
+
+  <!-- (Optional) Google Analytics 4 -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXX');
+  </script> -->
 </head>
 <body>
   <header>
     <div class="container nav">
-      <a class="brand" href="index.html"><img src="assets/favicon.png"/><span>Cricket LIVE</span></a>
-      <div class="menu">
+      <a class="brand" href="index.html" aria-label="Cricket Live Home">
+        <img src="assets/favicon.png" alt="Cricket Live logo"/><span>Cricket LIVE</span>
+      </a>
+      <nav class="menu" aria-label="Main">
         <a class="btn" href="index.html">Home</a>
-        <a class="btn primary" href="get-app.html">Get App</a>
-      </div>
+        <a class="btn primary" href="get-app.html" aria-current="page">Get App</a>
+        <a class="btn" href="https://wa.me/94787336580" rel="nofollow">WhatsApp</a>
+      </nav>
     </div>
   </header>
 
   <section class="hero">
     <div class="container wrap">
       <div class="card">
-        <h1 class="title">Get the App</h1>
-        <p class="lead">Watch cricket live streams & highlights anytime. Download the Android APK or iOS build. You can also subscribe to the private API plan.</p>
+        <h1 class="title">Download the Cricket Streaming App (Android)</h1>
+        <p class="lead">Watch live cricket and highlights. Choose the APK that matches your device (arm64 for most phones). Private API is also available. For your own branded app, contact us on WhatsApp.</p>
         <div class="cta-row">
-          <a class="btn primary" href="#android">Android</a>
-          <a class="btn" href="#ios">iOS</a>
-          <a class="btn" href="#api">API Plan</a>
+          <a class="btn primary" href="#android">Android APKs</a>
+          <a class="btn" href="#api">Private API</a>
+          <a class="btn" href="https://wa.me/94787336580">Order Your App ($100)</a>
         </div>
-        <p class="hint" style="margin-top:10px">Note: Streams are only for users with legal access rights. API is bundled with paid builds.</p>
+        <p class="meta" style="margin-top:10px;color:#4b6a67">
+          Legal: Use only streams you have rights to. We do not provide TV rights.
+        </p>
       </div>
 
-      <div class="phone-mockups">
+      <div class="phone-mockups" aria-hidden="true">
         <img src="assets/app1.png" alt="App screenshot 1"/>
         <img src="assets/app2.png" alt="App screenshot 2"/>
       </div>
@@ -78,28 +204,78 @@
 
   <div class="stripe container"></div>
 
-  <section class="container grid">
-    <div id="android" class="tile">
-      <h2 class="title" style="margin:0">Android APK</h2>
-      <a class="btn primary" href="assets/sample-app.apk" download>Download APK</a>
-      <span class="hint">How to install: Allow “Install unknown apps” → Open APK → Install.</span>
+  <section class="container grid" id="android">
+    <!-- ARM64 -->
+    <article class="tile" itemscope itemtype="https://schema.org/SoftwareApplication">
+      <span class="badge">Recommended</span>
+      <h2 class="title" style="margin:0" itemprop="name">Android APK — arm64-v8a</h2>
+      <p class="meta">Most modern Android phones • <b>22.1 MB</b></p>
+      <a class="btn primary" itemprop="downloadUrl"
+         href="https://github.com/samaraEdirisooriya/crichd_api/releases/download/v1.0.0/cricket_app-arm64.apk">
+        Download arm64 APK
+      </a>
+      <div class="meta">SHA-256:</div>
+      <div class="hash">8bf3a541f5684d2797b7681b2c6ef1bdb645303c089c024cd27658aea0437921</div>
+    </article>
+
+    <!-- V7A -->
+    <article class="tile" itemscope itemtype="https://schema.org/SoftwareApplication">
+      <h2 class="title" style="margin:0" itemprop="name">Android APK — armeabi-v7a</h2>
+      <p class="meta">Older 32-bit phones • <b>19.8 MB</b></p>
+      <a class="btn primary" itemprop="downloadUrl"
+         href="https://github.com/samaraEdirisooriya/crichd_api/releases/download/v1.0.0/cricket_app-v7a.apk">
+        Download v7a APK
+      </a>
+      <div class="meta">SHA-256:</div>
+      <div class="hash">79fdb40c85207d1d96fa6a9999813cde242c78f2364250eac78d42abcb2baa88</div>
+    </article>
+
+    <!-- X86_64 -->
+    <article class="tile" itemscope itemtype="https://schema.org/SoftwareApplication">
+      <h2 class="title" style="margin:0" itemprop="name">Android APK — x86_64</h2>
+      <p class="meta">Emulators / some tablets • <b>23.2 MB</b></p>
+      <a class="btn primary" itemprop="downloadUrl"
+         href="https://github.com/samaraEdirisooriya/crichd_api/releases/download/v1.0.0/cricket_app-x86_64.apk">
+        Download x86_64 APK
+      </a>
+      <div class="meta">SHA-256:</div>
+      <div class="hash">2515a3580bb6b109e0900e073cb4def855d08f4a3627f3dee650bd5eab25d2c9</div>
+    </article>
+  </section>
+
+  <div class="stripe container"></div>
+
+  <section class="container" id="api">
+    <article class="tile">
+      <h2 class="title" style="margin:0">Private API Plan</h2>
+      <p class="lead">₹850 / month (~$10). No free trial. Cancel anytime. API is also included with the $100 full app build.</p>
+      <div class="cta-row">
+        <a class="btn primary" href="https://wa.me/94787336580">Subscribe via WhatsApp</a>
+        <a class="btn" href="index.html">See full features</a>
+      </div>
+    </article>
+  </section>
+
+  <div class="stripe container"></div>
+
+  <section class="container faq" aria-label="FAQ">
+    <div class="tile">
+      <div class="q">Which APK should I download?</div>
+      <div class="a">Most users should pick <b>arm64-v8a</b>. Only older phones need <b>v7a</b>. Emulators often use <b>x86_64</b>.</div>
     </div>
-    <div id="ios" class="tile">
-      <h2 class="title" style="margin:0">iOS (TestFlight)</h2>
-      <a class="btn primary" href="https://testflight.apple.com/join/XXXXXXXX" target="_blank">Open TestFlight</a>
-      <span class="hint">Replace this link with your real TestFlight / App Store link.</span>
+    <div class="tile">
+      <div class="q">How do I verify the download?</div>
+      <div class="a">Run a SHA-256 check and compare with the value shown above. On Windows PowerShell: <code>Get-FileHash .\your.apk -Algorithm SHA256</code></div>
     </div>
-    <div id="api" class="tile">
-      <h2 class="title" style="margin:0">Subscribe API</h2>
-      <p class="lead">₹850 / month (~$10). No free trial. Cancel anytime.</p>
-      <a class="btn primary" href="https://wa.me/91XXXXXXXXXX">Subscribe on WhatsApp</a>
-      <span class="hint">Private API is included with the paid app build as well.</span>
+    <div class="tile">
+      <div class="q">Can you build this app with my branding?</div>
+      <div class="a">Yes. Full build is <b>$100</b> with your name, icons, AdMob & push. Message us on <a href="https://wa.me/94787336580">WhatsApp</a>.</div>
     </div>
   </section>
 
   <footer class="container">
     <div class="stripe"></div>
-    <div>© 2025 Cricket Live</div>
+    <p>© 2025 Cricket Live — Live streaming app & API.</p>
   </footer>
 </body>
 </html>
