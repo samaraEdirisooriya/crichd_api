@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Matches - Cricket Betting Championship</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Roboto:wght@400;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.3.2/pixi.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        :root {
+            --primary-navy: #0a0e27;
+            --electric-blue: #00d4ff;
+            --neon-green: #39ff14;
+            --hot-pink: #ff1493;
+            --gold: #ffd700;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--primary-navy) 0%, #000000 100%);
+            font-family: 'Roboto', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .comic-text {
+            font-family: 'Bangers', cursive;
+            text-shadow: 3px 3px 0px #000, 
+                         -1px -1px 0px #000,  
+                         1px -1px 0px #000,
+                         -1px 1px 0px #000,
+                         1px 1px 0px #000;
+        }
+        
+        .glow-text {
+            text-shadow: 0 0 10px var(--electric-blue),
+                         0 0 20px var(--electric-blue),
+                         0 0 30px var(--electric-blue);
+        }
+        
+        .neon-border {
+            border: 2px solid var(--electric-blue);
+            box-shadow: 0 0 10px var(--electric-blue),
+                        inset 0 0 10px rgba(0, 212, 255, 0.1);
+        }
+        
+        .match-card {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(57, 255, 20, 0.1) 100%);
+            border: 2px solid var(--electric-blue);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .match-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.4);
+            border-color: var(--neon-green);
+        }
+        
+        .nav-bottom {
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 2px solid var(--electric-blue);
+        }
+        
+        .modal {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, var(--primary-navy) 0%, #000000 100%);
+            border: 2px solid var(--electric-blue);
+            box-shadow: 0 0 50px rgba(0, 212, 255, 0.5);
+        }
+        
+        .team-selector {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .team-selector:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        }
+        
+        .team-selector.selected {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 30px rgba(57, 255, 20, 0.6);
+        }
+        
+        .pulse-glow {
+            animation: pulseGlow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes pulseGlow {
+            from {
+                box-shadow: 0 0 20px var(--neon-green),
+                           0 0 30px var(--neon-green),
+                           0 0 40px var(--neon-green);
+            }
+            to {
+                box-shadow: 0 0 30px var(--neon-green),
+                           0 0 40px var(--neon-green),
+                           0 0 50px var(--neon-green);
+            }
+        }
+        
+        .vs-animation {
+            animation: vsPulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes vsPulse {
+            0%, 100% { transform: scale(1); color: var(--electric-blue); }
+            50% { transform: scale(1.2); color: var(--neon-green); }
+        }
+        
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body class="text-white min-h-screen pb-20">
+    <!-- Header -->
+    <header class="py-6 px-4 text-center">
+        <h1 class="comic-text text-3xl md:text-5xl glow-text mb-2">
+            🏏 LIVE MATCHES 🏏
+        </h1>
+        <p class="text-gray-300">Select a match and place your bets!</p>
+    </header>
+    
+    <!-- Matches Grid -->
+    <main class="px-4 pb-8">
+        <div class="grid grid-cols-1 gap-6 max-w-4xl mx-auto">
+            <!-- Match 1: AFG vs BAN -->
+            <div class="match-card rounded-lg p-6" onclick="openMatchModal('afg-vs-ban')">
+                <div class="flex justify-between items-center mb-4">
+                    <div class="text-sm text-gray-400">1st ODI • Today</div>
+                    <div class="text-xs bg-red-500 px-2 py-1 rounded">LIVE</div>
+                </div>
+                
+                <div class="flex justify-between items-center mb-4">
+                    <div class="text-center">
+                        <div class="text-4xl mb-2">🇦🇫</div>
+                        <div class="font-bold text-lg">Afghanistan</div>
+                        <div class="text-xs text-gray-400">Rashid Khan</div>
+                    </div>
+                    <div class="text-3xl font-bold text-red-400 vs-animation">VS</div>
+                    <div class="text-center">
+                        <div class="text-4xl mb-2">🇧🇩</div>
+                        <div class="font-bold text-lg">Bangladesh</div>
+                        <div class="text-xs text-gray-400">Jhakar Ali</div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800 rounded-lg p-3">
+                    <div class="text-sm text-gray-400 mb-2">Win Probability</div>
+                    <div class="flex justify-between text-xs">
+                        <span>45%</span>
+                        <span>55%</span>
+                    </div>
+                    <div class="w-full bg-gray-700 rounded-full h-2 mt-1">
+                        <div class="bg-gradient-to-r from-blue-500 to-green-500 h-2 rounded-full" style="width: 55%"></div>
+                    </div>
+                </div>
+                
+                <div class="mt-4 text-center">
+                    <button class="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-2 rounded-full text-sm font-bold hover:scale-105 transition-transform">
+                        PLACE BET →
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Match 2: IND vs WI -->
+            <div class="match-card rounded-lg p-6" onclick="openMatchModal('ind-vs-wi')">
+                <div class="flex justify-between items-center mb-4">
+                    <div class="text-sm text-gray-400">Test Series • Oct 10</div>
+                    <div class="text-xs bg-yellow-500 px-2 py-1 rounded text-black">UPCOMING</div>
+                </div>
+                
+                <div class="flex justify-between items-center mb-4">
+                    <div class="text-center">
+                        <div class="text-4xl mb-2">🇮🇳</div>
+                        <div class="font-bold text-lg">India</div>
+                        <div class="text-xs text-gray-400">Subman Gill</div>
+                    </div>
+                    <div class="text-3xl font-bold text-red-400 vs-animation">VS</div>
+                    <div class="text-center">
+                        <div class="text-4xl mb-2">🇼🇮</div>
+                        <div class="font-bold text-lg">West Indies</div>
+                        <div class="text-xs text-gray-400">Rostan Chase</div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800 rounded-lg p-3">
+                    <div class="text-sm text-gray-400 mb-2">Win Probability</div>
+                    <div class="flex justify-between text-xs">
+                        <span>65%</span>
+                        <span>35%</span>
+                    </div>
+                    <div class="w-full bg-gray-700 rounded-full h-2 mt-1">
+                        <div class="bg-gradient-to-r from-orange-500 to-blue-500 h-2 rounded-full" style="width: 65%"></div>
+                    </div>
+                </div>
+                
+                <div class="mt-4 text-center">
+                    <button class="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-2 rounded-full text-sm font-bold hover:scale-105 transition-transform">
+                        PLACE BET →
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Match 3: NAM vs SA -->
+            <div class="match-card rounded-lg p-6" onclick="openMatchModal('nam-vs-sa')">
+                <div class="flex justify-between items-center mb-4">
+                    <div class="text-sm text-gray-400">T20 • Oct 11</div>
+                    <div class="text-xs bg-yellow-500 px-2 py-1 rounded text-black">UPCOMING</div>
+                </div>
+                
+                <div class="flex justify-between items-center mb-4">
+                    <div class="text-center">
+                        <div class="text-4xl mb-2">🇳🇦</div>
+                        <div class="font-bold text-lg">Namibia</div>
+                        <div class="text-xs text-gray-400">Gerhard Erasmus</div>
+                    </div>
+                    <div class="text-3xl font-bold text-red-400 vs-animation">VS</div>
+                    <div class="text-center">
+                        <div class="text-4xl mb-2">🇿🇦</div>
+                        <div class="font-bold text-lg">South Africa</div>
+                        <div class="text-xs text-gray-400">Temba Bavuma</div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800 rounded-lg p-3">
+                    <div class="text-sm text-gray-400 mb-2">Win Probability</div>
+                    <div class="flex justify-between text-xs">
+                        <span>25%</span>
+                        <span>75%</span>
+                    </div>
+                    <div class="w-full bg-gray-700 rounded-full h-2 mt-1">
+                        <div class="bg-gradient-to-r from-green-500 to-yellow-500 h-2 rounded-full" style="width: 75%"></div>
+                    </div>
+                </div>
+                
+                <div class="mt-4 text-center">
+                    <button class="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-2 rounded-full text-sm font-bold hover:scale-105 transition-transform">
+                        PLACE BET →
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Match 4: PAK vs SA -->
+            <div class="match-card rounded-lg p-6" onclick="openMatchModal('pak-vs-sa')">
+                <div class="flex justify-between items-center mb-4">
+                    <div class="text-sm text-gray-400">Test • Oct 12-16</div>
+                    <div class="text-xs bg-yellow-500 px-2 py-1 rounded text-black">UPCOMING</div>
+                </div>
+                
+                <div class="flex justify-between items-center mb-4">
+                    <div class="text-center">
+                        <div class="text-4xl mb-2">🇵🇰</div>
+                        <div class="font-bold text-lg">Pakistan</div>
+                        <div class="text-xs text-gray-400">Babar Azam</div>
+                    </div>
+                    <div class="text-3xl font-bold text-red-400 vs-animation">VS</div>
+                    <div class="text-center">
+                        <div class="text-4xl mb-2">🇿🇦</div>
+                        <div class="font-bold text-lg">South Africa</div>
+                        <div class="text-xs text-gray-400">Temba Bavuma</div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800 rounded-lg p-3">
+                    <div class="text-sm text-gray-400 mb-2">Win Probability</div>
+                    <div class="flex justify-between text-xs">
+                        <span>55%</span>
+                        <span>45%</span>
+                    </div>
+                    <div class="w-full bg-gray-700 rounded-full h-2 mt-1">
+                        <div class="bg-gradient-to-r from-green-500 to-blue-500 h-2 rounded-full" style="width: 55%"></div>
+                    </div>
+                </div>
+                
+                <div class="mt-4 text-center">
+                    <button class="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-2 rounded-full text-sm font-bold hover:scale-105 transition-transform">
+                        PLACE BET →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Match Modal -->
+    <div id="matchModal" class="modal fixed inset-0 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="modal-content rounded-lg p-6 w-full max-w-md">
+                <!-- Modal Header -->
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="comic-text text-2xl glow-text">MATCH DETAILS</h2>
+                    <button onclick="closeMatchModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+                </div>
+                
+                <!-- Match Info -->
+                <div id="modalMatchInfo" class="mb-6">
+                    <!-- Dynamic content will be inserted here -->
+                </div>
+                
+                <!-- Team Selection -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold mb-4 text-center">SELECT YOUR TEAM</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div id="teamA-selector" class="team-selector border-2 border-blue-500 rounded-lg p-4 text-center" onclick="selectTeam('A')">
+                            <div id="teamA-flag" class="text-3xl mb-2">🇦🇫</div>
+                            <div id="teamA-name" class="font-bold">Afghanistan</div>
+                        </div>
+                        <div id="teamB-selector" class="team-selector border-2 border-blue-500 rounded-lg p-4 text-center" onclick="selectTeam('B')">
+                            <div id="teamB-flag" class="text-3xl mb-2">🇧🇩</div>
+                            <div id="teamB-name" class="font-bold">Bangladesh</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- User Form -->
+                <div class="mb-6">
+                    <input type="text" id="username" placeholder="Enter your name" class="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 mb-3 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none">
+                    <input type="email" id="email" placeholder="Enter your email" class="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none">
+                </div>
+                
+                <!-- Place Bet Button -->
+                <button id="placeBetBtn" onclick="placeBet()" class="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 rounded-lg text-lg neon-border pulse-glow transition-all duration-300">
+                    PLACE BET NOW
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Success Modal -->
+    <div id="successModal" class="modal fixed inset-0 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="modal-content rounded-lg p-6 w-full max-w-md text-center">
+                <div class="text-6xl mb-4">🎉</div>
+                <h2 class="comic-text text-3xl glow-text mb-4">BET PLACED!</h2>
+                <p class="text-lg mb-4">Your bet has been placed successfully!</p>
+                <p class="text-sm text-gray-300 mb-6">When your team wins, you could win $10,000!</p>
+                <button onclick="closeSuccessModal()" class="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-3 px-6 rounded-full">
+                    CONTINUE
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Confetti Container -->
+    <div id="confetti-container" class="confetti-container"></div>
+    
+    <!-- Bottom Navigation -->
+    <nav class="nav-bottom fixed bottom-0 left-0 right-0 z-50">
+        <div class="flex justify-around items-center py-3">
+            <button onclick="window.location.href='index.html'" class="flex flex-col items-center text-gray-400 hover:text-blue-400 transition-colors">
+                <div class="text-xl mb-1">🏠</div>
+                <span class="text-xs">Home</span>
+            </button>
+            <button class="flex flex-col items-center text-blue-400">
+                <div class="text-xl mb-1">🏏</div>
+                <span class="text-xs">Matches</span>
+            </button>
+            <button onclick="window.location.href='leaderboard.html'" class="flex flex-col items-center text-gray-400 hover:text-blue-400 transition-colors">
+                <div class="text-xl mb-1">🏆</div>
+                <span class="text-xs">Winners</span>
+            </button>
+        </div>
+    </nav>
+    
+    <script src="main.js"></script>
+</body>
+</html>

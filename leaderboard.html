@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Winners & Leaderboard - Cricket Betting Championship</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Roboto:wght@400;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        :root {
+            --primary-navy: #0a0e27;
+            --electric-blue: #00d4ff;
+            --neon-green: #39ff14;
+            --hot-pink: #ff1493;
+            --gold: #ffd700;
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--primary-navy) 0%, #000000 100%);
+            font-family: 'Roboto', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .comic-text {
+            font-family: 'Bangers', cursive;
+            text-shadow: 3px 3px 0px #000, 
+                         -1px -1px 0px #000,  
+                         1px -1px 0px #000,
+                         -1px 1px 0px #000,
+                         1px 1px 0px #000;
+        }
+        
+        .glow-text {
+            text-shadow: 0 0 10px var(--electric-blue),
+                         0 0 20px var(--electric-blue),
+                         0 0 30px var(--electric-blue);
+        }
+        
+        .neon-border {
+            border: 2px solid var(--electric-blue);
+            box-shadow: 0 0 10px var(--electric-blue),
+                        inset 0 0 10px rgba(0, 212, 255, 0.1);
+        }
+        
+        .nav-bottom {
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 2px solid var(--electric-blue);
+        }
+        
+        .winner-card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%);
+            border: 2px solid var(--gold);
+            transition: all 0.3s ease;
+        }
+        
+        .winner-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+        
+        .leaderboard-item {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(57, 255, 20, 0.1) 100%);
+            border: 1px solid var(--electric-blue);
+            transition: all 0.3s ease;
+        }
+        
+        .leaderboard-item:hover {
+            border-color: var(--neon-green);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.2);
+        }
+        
+        .rank-1 {
+            background: linear-gradient(135deg, var(--gold) 0%, #ffed4e 100%);
+            border-color: var(--gold);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+        
+        .rank-2 {
+            background: linear-gradient(135deg, var(--silver) 0%, #e8e8e8 100%);
+            border-color: var(--silver);
+            box-shadow: 0 0 30px rgba(192, 192, 192, 0.5);
+        }
+        
+        .rank-3 {
+            background: linear-gradient(135deg, var(--bronze) 0%, #d4a574 100%);
+            border-color: var(--bronze);
+            box-shadow: 0 0 30px rgba(205, 127, 50, 0.5);
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .pulse-glow {
+            animation: pulseGlow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes pulseGlow {
+            from {
+                box-shadow: 0 0 20px var(--gold),
+                           0 0 30px var(--gold),
+                           0 0 40px var(--gold);
+            }
+            to {
+                box-shadow: 0 0 30px var(--gold),
+                           0 0 40px var(--gold),
+                           0 0 50px var(--gold);
+            }
+        }
+        
+        .counter {
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+        }
+        
+        .celebration-bg {
+            background: radial-gradient(circle at 30% 20%, rgba(255, 215, 0, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(0, 212, 255, 0.3) 0%, transparent 50%);
+        }
+    </style>
+</head>
+<body class="text-white min-h-screen pb-20">
+    <!-- Header -->
+    <header class="celebration-bg py-8 px-4 text-center">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="comic-text text-4xl md:text-6xl glow-text mb-4">
+                🏆 WINNERS BOARD 🏆
+            </h1>
+            <p class="text-lg md:text-xl text-gray-300 mb-6">
+                Congratulations to all our lucky winners!
+            </p>
+            
+            <!-- Stats Counter -->
+            <div class="grid grid-cols-3 gap-4 max-w-md mx-auto">
+                <div class="text-center">
+                    <div class="counter text-3xl font-bold text-yellow-400" id="total-winners">0</div>
+                    <div class="text-xs text-gray-400">Total Winners</div>
+                </div>
+                <div class="text-center">
+                    <div class="counter text-3xl font-bold text-green-400" id="total-prizes">0</div>
+                    <div class="text-xs text-gray-400">Prizes Given ($)</div>
+                </div>
+                <div class="text-center">
+                    <div class="counter text-3xl font-bold text-blue-400" id="today-winners">0</div>
+                    <div class="text-xs text-gray-400">Today Winners</div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Recent Winners Carousel -->
+    <section class="py-8 px-4">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="comic-text text-2xl md:text-3xl text-center mb-8 glow-text">
+                🎉 RECENT WINNERS 🎉
+            </h2>
+            
+            <div class="splide" id="winners-carousel">
+                <div class="splide__track">
+                    <ul class="splide__list">
+                        <!-- Winner Card 1 -->
+                        <li class="splide__slide">
+                            <div class="winner-card rounded-lg p-6 mx-2 text-center">
+                                <div class="text-4xl mb-3">🥳</div>
+                                <div class="font-bold text-lg mb-1">Rajesh Kumar</div>
+                                <div class="text-yellow-400 text-xl font-bold mb-1">$5</div>
+                                <div class="text-sm text-gray-400 mb-2">India vs Australia</div>
+                                <div class="text-xs text-gray-500">2 hours ago</div>
+                            </div>
+                        </li>
+                        
+                        <!-- Winner Card 2 -->
+                        <li class="splide__slide">
+                            <div class="winner-card rounded-lg p-6 mx-2 text-center">
+                                <div class="text-4xl mb-3">🎊</div>
+                                <div class="font-bold text-lg mb-1">Priya Sharma</div>
+                                <div class="text-yellow-400 text-xl font-bold mb-1">$2</div>
+                                <div class="text-sm text-gray-400 mb-2">England vs Pakistan</div>
+                                <div class="text-xs text-gray-500">5 hours ago</div>
+                            </div>
+                        </li>
+                        
+                        <!-- Winner Card 3 -->
+                        <li class="splide__slide">
+                            <div class="winner-card rounded-lg p-6 mx-2 text-center">
+                                <div class="text-4xl mb-3">💰</div>
+                                <div class="font-bold text-lg mb-1">Amit Patel</div>
+                                <div class="text-yellow-400 text-xl font-bold mb-1">$10</div>
+                                <div class="text-sm text-gray-400 mb-2">South Africa vs NZ</div>
+                                <div class="text-xs text-gray-500">Yesterday</div>
+                            </div>
+                        </li>
+                        
+                        <!-- Winner Card 4 -->
+                        <li class="splide__slide">
+                            <div class="winner-card rounded-lg p-6 mx-2 text-center">
+                                <div class="text-4xl mb-3">🎈</div>
+                                <div class="font-bold text-lg mb-1">Neha Singh</div>
+                                <div class="text-yellow-400 text-xl font-bold mb-1">$1</div>
+                                <div class="text-sm text-gray-400 mb-2">Bangladesh vs SL</div>
+                                <div class="text-xs text-gray-500">Yesterday</div>
+                            </div>
+                        </li>
+                        
+                        <!-- Winner Card 5 -->
+                        <li class="splide__slide">
+                            <div class="winner-card rounded-lg p-6 mx-2 text-center">
+                                <div class="text-4xl mb-3">🎁</div>
+                                <div class="font-bold text-lg mb-1">Vikram Joshi</div>
+                                <div class="text-yellow-400 text-xl font-bold mb-1">$3</div>
+                                <div class="text-sm text-gray-400 mb-2">West Indies vs Eng</div>
+                                <div class="text-xs text-gray-500">2 days ago</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Top Winners Leaderboard -->
+    <section class="py-8 px-4">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="comic-text text-2xl md:text-3xl text-center mb-8 glow-text">
+                🏅 TOP WINNERS 🏅
+            </h2>
+            
+            <div class="space-y-4">
+                <!-- Rank 1 -->
+                <div class="leaderboard-item rank-1 rounded-lg p-4 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="text-3xl mr-4">🥇</div>
+                        <div>
+                            <div class="font-bold text-lg text-black">Amit Patel</div>
+                            <div class="text-sm text-gray-800">15 matches won</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="counter text-2xl font-bold text-black">$50</div>
+                        <div class="text-xs text-gray-800">Total Winnings</div>
+                    </div>
+                </div>
+                
+                <!-- Rank 2 -->
+                <div class="leaderboard-item rank-2 rounded-lg p-4 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="text-3xl mr-4">🥈</div>
+                        <div>
+                            <div class="font-bold text-lg text-black">Rajesh Kumar</div>
+                            <div class="text-sm text-gray-700">12 matches won</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="counter text-2xl font-bold text-black">$32</div>
+                        <div class="text-xs text-gray-700">Total Winnings</div>
+                    </div>
+                </div>
+                
+                <!-- Rank 3 -->
+                <div class="leaderboard-item rank-3 rounded-lg p-4 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="text-3xl mr-4">🥉</div>
+                        <div>
+                            <div class="font-bold text-lg text-white">Priya Sharma</div>
+                            <div class="text-sm text-gray-300">10 matches won</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="counter text-2xl font-bold text-white">$28</div>
+                        <div class="text-xs text-gray-300">Total Winnings</div>
+                    </div>
+                </div>
+                
+                <!-- Rank 4 -->
+                <div class="leaderboard-item rounded-lg p-4 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="text-2xl mr-4">4️⃣</div>
+                        <div>
+                            <div class="font-bold text-lg">Vikram Joshi</div>
+                            <div class="text-sm text-gray-400">8 matches won</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="counter text-xl font-bold text-yellow-400">$18</div>
+                        <div class="text-xs text-gray-400">Total Winnings</div>
+                    </div>
+                </div>
+                
+                <!-- Rank 5 -->
+                <div class="leaderboard-item rounded-lg p-4 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="text-2xl mr-4">5️⃣</div>
+                        <div>
+                            <div class="font-bold text-lg">Neha Singh</div>
+                            <div class="text-sm text-gray-400">7 matches won</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="counter text-xl font-bold text-yellow-400">$15</div>
+                        <div class="text-xs text-gray-400">Total Winnings</div>
+                    </div>
+                </div>
+                
+                <!-- Rank 6 -->
+                <div class="leaderboard-item rounded-lg p-4 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="text-2xl mr-4">6️⃣</div>
+                        <div>
+                            <div class="font-bold text-lg">Suresh Reddy</div>
+                            <div class="text-sm text-gray-400">6 matches won</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="counter text-xl font-bold text-yellow-400">$12</div>
+                        <div class="text-xs text-gray-400">Total Winnings</div>
+                    </div>
+                </div>
+                
+                <!-- Rank 7 -->
+                <div class="leaderboard-item rounded-lg p-4 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="text-2xl mr-4">7️⃣</div>
+                        <div>
+                            <div class="font-bold text-lg">Anita Desai</div>
+                            <div class="text-sm text-gray-400">5 matches won</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="counter text-xl font-bold text-yellow-400">$9</div>
+                        <div class="text-xs text-gray-400">Total Winnings</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Prize Distribution -->
+    <section class="py-8 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="comic-text text-2xl md:text-3xl mb-6 glow-text">
+                💎 PRIZE DISTRIBUTION 💎
+            </h2>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-lg p-4">
+                    <div class="text-2xl mb-2">🏆</div>
+                    <div class="font-bold text-black">Grand Prize</div>
+                    <div class="text-sm text-gray-800">$100</div>
+                </div>
+                <div class="bg-gradient-to-r from-gray-400 to-gray-500 rounded-lg p-4">
+                    <div class="text-2xl mb-2">🥇</div>
+                    <div class="font-bold text-black">Gold Prize</div>
+                    <div class="text-sm text-gray-800">$50</div>
+                </div>
+                <div class="bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg p-4">
+                    <div class="text-2xl mb-2">🥈</div>
+                    <div class="font-bold text-black">Silver Prize</div>
+                    <div class="text-sm text-gray-800">$25</div>
+                </div>
+                <div class="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg p-4">
+                    <div class="text-2xl mb-2">🥉</div>
+                    <div class="font-bold text-black">Bronze Prize</div>
+                    <div class="text-sm text-gray-800">$10</div>
+                </div>
+            </div>
+            
+            <div class="bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg p-6">
+                <h3 class="comic-text text-2xl mb-4">🎯 YOU COULD BE NEXT! 🎯</h3>
+                <p class="text-lg mb-4">
+                    10 random winners selected every match!
+                </p>
+                <button onclick="window.location.href='matches.html'" class="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 px-8 rounded-full text-lg neon-border pulse-glow transition-all duration-300">
+                    PLACE YOUR BET NOW
+                </button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Bottom Navigation -->
+    <nav class="nav-bottom fixed bottom-0 left-0 right-0 z-50">
+        <div class="flex justify-around items-center py-3">
+            <button onclick="window.location.href='index.html'" class="flex flex-col items-center text-gray-400 hover:text-blue-400 transition-colors">
+                <div class="text-xl mb-1">🏠</div>
+                <span class="text-xs">Home</span>
+            </button>
+            <button onclick="window.location.href='matches.html'" class="flex flex-col items-center text-gray-400 hover:text-blue-400 transition-colors">
+                <div class="text-xl mb-1">🏏</div>
+                <span class="text-xs">Matches</span>
+            </button>
+            <button class="flex flex-col items-center text-blue-400">
+                <div class="text-xl mb-1">🏆</div>
+                <span class="text-xs">Winners</span>
+            </button>
+        </div>
+    </nav>
+    
+    <script src="main.js"></script>
+</body>
+</html>
