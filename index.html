@@ -1,340 +1,566 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Cricket Fire Arena – BAN vs AFG</title>
+<style>
+:root{
+  --bg:#0a0b10;
+  --ink:#f7fbff;
+  --muted:#b9c4d6;
+  --gold:#ffcc4d;
+  --brand:#ff6a00;    /* fire orange */
+  --brand2:#ff2d55;   /* hot red-pink */
+  --ban:#00d08b;      /* BAN accent */
+  --afg:#ff415a;      /* AFG accent */
+  --glass:#121727cc;
+}
+/* Base */
+*{box-sizing:border-box} html,body{margin:0}
+body{
+  background:
+    radial-gradient(120% 70% at 50% -10%, #28120b 0%, #0a0b10 50%),
+    radial-gradient(120% 60% at 20% 10%, rgba(255,90,0,.15), transparent 60%),
+    radial-gradient(120% 60% at 80% 5%, rgba(255,45,85,.12), transparent 60%),
+    #0a0b10;
+  color:var(--ink);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  min-height:100svh;
+  overflow-x:hidden;
+}
+.app{max-width:480px; margin:0 auto; padding:14px 12px 24px; position:relative}
 
-  <title>Cricket Streaming App + Private API — Android & iOS for $100</title>
-  <meta name="description" content="Own your Cricket streaming app with a private API. We build Android & iOS for $100 (₹8,499). Live streams, highlights, AdMob, push, analytics. Download the sample APK or order on WhatsApp.">
-  <meta name="theme-color" content="#00c9a9" />
-  <meta name="robots" content="index,follow,max-image-preview:large" />
-  <meta name="author" content="Cricket Live" />
-  <link rel="canonical" href="https://app.crickgd.live/" />
+/* Header */
+.header{
+  display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:10px
+}
+.logo{
+  display:flex; align-items:center; gap:8px; font-weight:900; letter-spacing:.06em;
+}
+.logo .bolt{
+  width:26px; height:26px; border-radius:8px;
+  background: radial-gradient(circle at 40% 30%, #fff 0%, #ffd9a6 25%, #ff9a3d 55%, #ff6a00 75%);
+  box-shadow:0 0 24px rgba(255,106,0,.5), 0 0 60px rgba(255,45,85,.25);
+  position:relative; overflow:hidden;
+}
+.brand{
+  font-size:clamp(18px,5.6vw,22px);
+  background:linear-gradient(90deg,#ffd27b,#ff9a3d,#ff2d55);
+  -webkit-background-clip:text; color:transparent;
+}
+.header-right{
+  display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:flex-end;
+}
+.badge{
+  padding:6px 10px; font-size:12px; border-radius:999px;
+  color:#1c0f08; font-weight:900;
+  background:linear-gradient(90deg,#ffd27b,#ff9a3d);
+  box-shadow:0 8px 20px rgba(255,154,61,.35)
+}
+/* 🔥 Download App button */
+.btn-app{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:10px 12px; border-radius:999px; font-weight:1000; letter-spacing:.04em;
+  font-size:12px; text-decoration:none; color:#2b0b08;
+  background:linear-gradient(90deg,#ffcc7a,#ff9a3d);
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:
+    0 8px 20px rgba(255,154,61,.35),
+    0 0 0 2px rgba(255,154,61,.20) inset,
+    0 0 28px rgba(255,45,85,.25);
+  position:relative;
+}
+.btn-app::after{
+  content:""; position:absolute; inset:-6px; border-radius:999px;
+  box-shadow:0 0 22px 8px rgba(255,120,20,.26);
+  animation:appPulse 1.5s ease-in-out infinite;
+}
+@keyframes appPulse{
+  0%{opacity:.45; transform:scale(.98)}
+  50%{opacity:.95; transform:scale(1.02)}
+  100%{opacity:.45; transform:scale(.98)}
+}
 
-  <!-- Icons -->
-  <link rel="icon" href="/assets/favicon.png" />
-  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" sizes="180x180" />
-  <link rel="icon" href="/assets/favicon-32.png" sizes="32x32" />
-  <link rel="icon" href="/assets/favicon-16.png" sizes="16x16" />
-  <link rel="manifest" href="/site.webmanifest" />
+/* Arena card */
+.card{
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:20px;
+  background:linear-gradient(180deg, #151a25 0%, #0f1420 100%);
+  box-shadow:0 10px 30px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.04) inset;
+  padding:12px;
+}
+.pitch{
+  position:relative; overflow:hidden;
+  background: radial-gradient(60% 120% at 50% 100%, rgba(255,120,20,.16), rgba(255,30,40,.10), transparent 70%);
+  border-radius:16px; padding:10px;
+}
+.title{
+  text-align:center; font-weight:900; letter-spacing:.08em; font-size:12px; color:var(--muted); margin-bottom:4px
+}
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+/* VS Emblem with flames */
+.vs-wrap{ position:relative; width:82px; height:82px; margin:8px auto 10px }
+.flame{
+  position:absolute; inset:-25% -25%;
+  background:
+    radial-gradient(closest-side, rgba(255,180,0,.35), transparent 70%),
+    conic-gradient(from 0deg, rgba(255,120,20,.35), rgba(255,40,60,.35), rgba(255,120,20,.35));
+  filter: blur(22px) saturate(1.3);
+  border-radius:50%;
+  animation: flare 4.5s ease-in-out infinite;
+}
+@keyframes flare{
+  0%,100%{ transform: scale(1) rotate(0deg); opacity:.95 }
+  50%{ transform: scale(1.15) rotate(15deg); opacity:.75 }
+}
+.vs{
+  position:absolute; inset:0; display:grid; place-items:center;
+  border-radius:50%;
+  background: radial-gradient(circle at 50% 45%, #2a2e3b 0%, #1a1f2d 70%);
+  border:1px solid rgba(255,255,255,.15);
+  color:#ffe9c4; font-weight:1000; letter-spacing:.08em;
+  box-shadow:0 0 0 10px rgba(255,115,28,.12), 0 0 32px rgba(255,45,85,.25), inset 0 0 12px rgba(0,0,0,.6);
+}
+.vs::after{
+  content:""; position:absolute; inset:-35%;
+  background:conic-gradient(from 0deg, #ffffff00 0 70deg, #ffffff40 70deg 90deg, #ffffff00 90deg 360deg);
+  border-radius:50%;
+  animation: spin 7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-  <!-- Open Graph -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://app.crickgd.live/" />
-  <meta property="og:title" content="Cricket Streaming App + Private API — Android & iOS for $100" />
-  <meta property="og:description" content="Get a branded Cricket streaming app with a private API for $100. Download the sample APK and chat with us on WhatsApp to order." />
-  <meta property="og:image" content="https://app.crickgd.live/assets/og-cover.jpg" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
+/* Selected team glow */
+.team.glow{
+  border-color:#ffb469;
+  box-shadow:
+    0 0 0 2px rgba(255,154,61,.45) inset,
+    0 10px 26px rgba(255,120,20,.45),
+    0 0 30px rgba(255,45,85,.35);
+  position: relative;
+}
+.team.glow::after{
+  content:"";
+  position:absolute; inset:-6px; border-radius:18px;
+  box-shadow: 0 0 22px 8px rgba(255,120,20,.26);
+  animation: glowPulse 1.4s ease-in-out infinite;
+}
+@keyframes glowPulse{
+  0%  { opacity:.45; transform: scale(.98); }
+  50% { opacity:.95; transform: scale(1.02); }
+  100%{ opacity:.45; transform: scale(.98); }
+}
 
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Cricket Streaming App + Private API — Android & iOS for $100" />
-  <meta name="twitter:description" content="Download the sample APK, then order your own branded streaming app with private API for $100." />
-  <meta name="twitter:image" content="https://app.crickgd.live/assets/og-cover.jpg" />
+/* Teams row */
+.teams{display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:8px}
+.team{
+  border:1px solid rgba(255,255,255,.12); border-radius:16px; padding:10px; cursor:pointer; user-select:none;
+  background:linear-gradient(180deg,#1a2031 0%, #131a28 100%);
+  box-shadow: 0 6px 18px rgba(0,0,0,.45);
+  transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease;
+}
+.team:active{ transform:scale(.98) }
+.team.active{
+  border-color:#ff9a3d; box-shadow: 0 10px 26px rgba(255,120,20,.35), 0 0 0 1px rgba(255,154,61,.25) inset;
+}
+.flag{
+  width:56px; height:36px; border-radius:6px; margin:auto;
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 4px 12px rgba(0,0,0,.5)
+}
+.ban{ background: radial-gradient(circle at 60% 50%, #f42a41 26%, transparent 29%), var(--ban) }
+.afg{ background: linear-gradient(90deg, #000 0 33%, #d32027 33% 66%, #007a36 66% 100%) }
+.team h3{ margin:8px 0 0; text-align:center; font-size:14px; font-weight:900 }
 
-  <!-- Hreflang -->
-  <link rel="alternate" hreflang="en-LK" href="https://app.crickgd.live/" />
-  <link rel="alternate" hreflang="en-IN" href="https://app.crickgd.live/" />
-  <link rel="alternate" hreflang="x-default" href="https://app.crickgd.live/" />
+/* CTA + copy */
+.cta{ display:flex; gap:8px; margin:12px 2px 6px }
+.btn{
+  flex:1; padding:14px; border-radius:14px; border:1px solid rgba(255,255,255,.12);
+  background:linear-gradient(90deg,#ff9a3d,#ff2d55);
+  color:#2b0b08; font-weight:1000; letter-spacing:.06em; cursor:pointer;
+  box-shadow:0 12px 28px rgba(255,90,0,.35);
+}
+.btn:disabled{opacity:.55; cursor:not-allowed}
+.mini{
+  padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:#1a2031; color:#ffd7a1; font-weight:900
+}
+.copy{ margin:6px 4px 10px; color:#ffd7a1; font-size:12px; line-height:1.5 }
 
-  <!-- Google Search Console (replace content value after adding site) -->
-  <meta name="google-site-verification" content="YOUR_SEARCH_CONSOLE_CODE_HERE" />
+/* Crowd bar (sample 60/40) */
+.crowd{ margin:8px 2px 10px }
+.crowd .label{ display:flex; justify-content:space-between; color:#ffddb0; font-size:12px; margin-bottom:6px; font-weight:800 }
+.bar{
+  height:14px; display:flex; overflow:hidden; border-radius:999px;
+  background:#0f1420; border:1px solid rgba(255,255,255,.12);
+  box-shadow: inset 0 0 10px rgba(255,255,255,.06), 0 0 22px rgba(255,120,20,.18);
+}
+.seg-ban{ background:linear-gradient(90deg,#1adea1,#00d08b); transition:width .45s ease }
+.seg-afg{ background:linear-gradient(90deg,#ff7a86,#ff415a); transition:width .45s ease }
 
-  <style>
-    :root{
-      --bg:#f6fbfa; --surface:#ffffff; --ink:#0b221f; --muted:#4b6a67; --line:#d9eeea;
-      --brand:#00c9a9; --brand2:#38ef7d; --brand3:#00e7ce; --shadow:0 10px 30px rgba(0,0,0,.06);
-      --ring: 0 0 0 3px rgba(0, 233, 200, .15);
-    }
-    *{box-sizing:border-box}
-    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Outfit',system-ui,Segoe UI,Roboto,sans-serif}
-    a{color:var(--ink); text-decoration:none}
-    .container{width:min(1200px,92vw); margin-inline:auto}
-    .blob-a,.blob-b{position:fixed;z-index:-1; filter:blur(60px); opacity:.45; pointer-events:none}
-    .blob-a{width:420px;height:420px;left:-120px;top:-120px;background:radial-gradient(closest-side,#9cffec,transparent)}
-    .blob-b{width:520px;height:520px;right:-160px;bottom:-160px;background:radial-gradient(closest-side,#b7ffd1,transparent)}
+/* Shadow Prize “card” */
+.gift{
+  margin:12px 2px; padding:12px; border-radius:16px; border:1px dashed rgba(255,154,61,.45);
+  background:linear-gradient(180deg,#171c2a 0%, #121827 100%);
+  position:relative; overflow:hidden;
+}
+.gift .row{ display:flex; align-items:center; gap:12px }
+.gift .box{
+  width:44px; height:44px; border-radius:10px;
+  background:linear-gradient(180deg,#ffcc7a 0%, #ff9a3d 100%);
+  box-shadow:0 8px 22px rgba(255,154,61,.45);
+  position:relative;
+}
+.gift .box:after{
+  content:""; position:absolute; inset:-25%;
+  background:radial-gradient(circle at 50% 50%, #fff, transparent 55%);
+  filter: blur(8px); opacity:.55; animation: glow 2s ease-in-out infinite;
+}
+@keyframes glow{ 0%,100%{opacity:.4; transform:scale(1)} 50%{opacity:.85; transform:scale(1.06)} }
+.gift .info strong{ display:block; font-size:14px }
+.gift .info small{ color:#ffdeb3 }
 
-    header{position:sticky; top:0; backdrop-filter:blur(8px); background:#ffffffcc; border-bottom:1px solid var(--line); z-index:50}
-    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:12px}
-    .brand{display:flex;gap:10px;align-items:center;font-weight:900}
-    .brand img{width:28px;height:28px}
+/* Dashboard */
+.dash{ margin:12px 2px; }
+.dash .card h4{ margin:0 0 8px; font-size:14px; font-weight:900 }
+.entry{
+  display:flex; justify-content:space-between; align-items:center; gap:10px;
+  background:var(--glass); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:10px
+}
+.chip{ padding:4px 10px; border-radius:999px; font-size:11px; font-weight:900; border:1px solid rgba(255,255,255,.16); color:#ffd7a1; background:#1b2131 }
+.chip.ok{ color:#0e5237; background:#0fe7a84d; border-color:#27f0b2 }
 
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:12px 18px;border-radius:14px;font-weight:800;border:1px solid #bfeee6;background:#fff;color:var(--ink);transition:.2s ease; box-shadow: var(--shadow)}
-    .btn:hover{transform:translateY(-1px)}
-    .btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand2)); color:#043a31; border:0; box-shadow:0 12px 30px rgba(0, 217, 180, .25)}
-    .btn.ghost{background:#fff}
+/* Modals */
+.modal{ position:fixed; inset:0; display:none; place-items:center; background:linear-gradient(180deg, rgba(10,11,16,.40), rgba(10,11,16,.75)); z-index:50; backdrop-filter: blur(2px) }
+.modal.open{ display:grid }
+.sheet{
+  width:min(94vw, 480px);
+  background:linear-gradient(180deg,#151b2a 0%, #101624 100%);
+  border:1px solid rgba(255,255,255,.12); border-radius:18px; padding:14px;
+  box-shadow:0 16px 50px rgba(255,90,0,.35)
+}
+.sheet h3{ text-align:center; margin:4px 0 10px; font-size:16px; font-weight:900; color:#ffd9a6 }
+.field{ margin:8px 0 }
+.label{ display:block; font-size:12px; color:#ffc78a; margin-bottom:4px }
+.input{
+  width:100%; padding:14px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.18); background:#0f1420; color:#fff; outline:none
+}
+.submit{
+  width:100%; padding:14px; border-radius:14px; border:1px solid rgba(255,255,255,.16);
+  background:linear-gradient(90deg,#ff9a3d,#ff2d55); color:#2b0b08; font-weight:1000; letter-spacing:.06em; margin-top:8px; cursor:pointer;
+  box-shadow:0 12px 28px rgba(255,90,0,.35)
+}
 
-    .pulse{animation:pulse 1.8s infinite}
-    @keyframes pulse {0%{box-shadow:var(--ring)}70%{box-shadow:0 0 0 20px rgba(0, 233, 200, 0)}100%{box-shadow:0 0 0 0 rgba(0, 233, 200, 0)}}
+/* Toast + sparks canvas */
+.toast{
+  position:fixed; left:50%; bottom:22px; transform:translateX(-50%);
+  background:linear-gradient(90deg,#ffcc7a,#ff9a3d); color:#2b0b08; font-weight:1000;
+  padding:10px 14px; border-radius:12px; display:none; z-index:60; border:1px solid rgba(255,255,255,.16)
+}
+#sparks,#confetti{ position:fixed; inset:0; pointer-events:none; z-index:55 }
 
-    .hero{padding:clamp(26px,6vw,72px) 0 16px}
-    .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(16px,4vw,36px)}
-    .h1{font-size:clamp(2rem,3.6vw,3.4rem);line-height:1.04;margin:0 0 8px;font-weight:900}
-    .grad{background:linear-gradient(90deg,#00cab2,#45f593); -webkit-background-clip:text; background-clip:text; color:transparent}
-    .lead{color:#325450; font-size:clamp(1rem,1.6vw,1.2rem); margin:10px 0 18px}
-    .hero-card{position:relative;padding:20px;border:1px solid var(--line);background:var(--surface);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
-
-    .offer{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 12px}
-    .offer .tag{background:#f7fffd;border:1px solid #c8f6ee;color:#086258;border-radius:999px;padding:6px 10px;font-size:.9rem}
-    .offer .hot{background:linear-gradient(120deg,#ffe8a3,#ffd36e);color:#3a2a00;border:0}
-
-    .check{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;margin:12px 0 18px}
-    .check span{display:flex;gap:10px;align-items:flex-start;color:#456b66}
-    .tick{width:18px;height:18px;border-radius:5px;background:linear-gradient(135deg,var(--brand),var(--brand2));display:inline-grid;place-items:center;color:#063d34;font-weight:900;font-size:.8rem}
-
-    .showcase{display:grid;gap:12px;grid-template-columns:1fr}
-    .card-media{border-radius:18px;background:#fff;padding:10px;border:1px solid var(--line);box-shadow:var(--shadow)}
-    .card-media img{display:block;width:100%;height:auto;border-radius:12px}
-
-    .stripe{height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin:26px 0}
-
-    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-    .tile{border:1px solid var(--line);border-radius:16px;background:#ffffff;box-shadow:var(--shadow);padding:14px}
-    .tile h3{margin:6px 0}
-    .tile p{color:#456b66;margin:6px 0}
-
-    .pricing{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-    .plan{border-radius:18px;border:1px solid var(--line);background:#ffffff;box-shadow:var(--shadow);padding:18px}
-    .price{font-size:2rem;font-weight:900;margin:6px 0;color:#0b3e35}
-    .incl li{color:#456b66;margin:6px 0}
-
-    .sticky-cta{position:sticky;bottom:0;z-index:60;backdrop-filter:blur(8px) saturate(140%);background:#ffffffcc;border-top:1px solid var(--line); padding-bottom:env(safe-area-inset-bottom)}
-    .sticky-cta .inner{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:8px 0}
-
-    .float-wa{position:fixed;right:16px;bottom:16px;display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--brand),var(--brand2));color:#043a31;border-radius:999px;padding:12px 16px;font-weight:900;border:0;box-shadow:0 8px 30px rgba(0, 217, 180, .3)}
-    .float-wa:hover{transform:translateY(-2px)}
-
-    footer{padding:40px 0 60px;color:#4a6a67;font-size:.95rem}
-    .disclaimer{font-size:.85rem;color:#5a7d79}
-
-    .reveal{opacity:0;transform:translateY(14px);transition:all .5s ease}
-    .reveal.in{opacity:1;transform:none}
-
-    @media(max-width: 980px){
-      .hero-grid{grid-template-columns:1fr}
-      .grid-3{grid-template-columns:1fr}
-      .pricing{grid-template-columns:1fr}
-      .check{grid-template-columns:1fr}
-    }
-    @media(max-width: 520px){
-      body{padding-bottom:96px;}
-      .container{width:92vw}
-      header{background:#ffffffee}
-      .nav{padding:10px 0}
-      .brand span{font-size:1rem}
-      .nav .cta{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;max-width:62%}
-      .nav .btn{padding:10px 12px;border-radius:12px;font-size:.95rem}
-      .nav .btn[href="#showcase"], .nav .btn.ghost{display:none}
-      .hero{padding:18px 0 10px}
-      .h1{font-size:1.9rem}
-      .lead{font-size:1rem}
-      .offer .tag{font-size:.82rem}
-      .hero-card .cta{display:grid;grid-template-columns:1fr;gap:10px}
-      .hero-card .btn{width:100%}
-      .plan .cta{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-      .plan .btn{width:100%}
-      .sticky-cta .inner{flex-wrap:wrap;gap:10px}
-      .sticky-cta .cta{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:8px}
-      .float-wa{bottom:calc(16px + 68px)}
-    }
-    @media(max-width:360px){
-      .brand span{display:none}
-      .nav .cta{max-width:70%}
-      .h1{font-size:1.7rem}
-      .plan .cta{grid-template-columns:1fr}
-    }
-  </style>
-
-  <!-- JSON-LD: WebSite with SearchAction -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"WebSite",
-    "url":"https://app.crickgd.live/",
-    "name":"Cricket Live",
-    "potentialAction":{
-      "@type":"SearchAction",
-      "target":"https://www.google.com/search?q=site:app.crickgd.live+{search_term_string}",
-      "query-input":"required name=search_term_string"
-    }
-  }
-  </script>
-
-  <!-- JSON-LD: Organization -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"Organization",
-    "name":"Cricket Live",
-    "url":"https://app.crickgd.live/",
-    "logo":"https://app.crickgd.live/assets/favicon.png",
-    "sameAs":[
-      "https://github.com/samaraEdirisooriya/crichd_api"
-    ],
-    "contactPoint":[{
-      "@type":"ContactPoint",
-      "telephone":"+94-78-733-6580",
-      "contactType":"sales",
-      "areaServed":"LK",
-      "availableLanguage":["en","si","ta"]
-    }]
-  }
-  </script>
-
-  <!-- JSON-LD: SoftwareApplication (high level landing description) -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"SoftwareApplication",
-    "name":"Cricket Streaming App",
-    "operatingSystem":"Android, iOS",
-    "applicationCategory":"EntertainmentApplication",
-    "offers":{"@type":"Offer","price":"100","priceCurrency":"USD"},
-    "downloadUrl":"https://app.crickgd.live/get-app.html",
-    "softwareVersion":"v1.0.0",
-    "alternateName":"Cricket Live",
-    "releaseNotes":"Initial release with live streaming, highlights, AdMob, push, and analytics.",
-    "publisher":{"@type":"Organization","name":"Cricket Live"},
-    "sameAs":"https://github.com/samaraEdirisooriya/crichd_api"
-  }
-  </script>
-
-  <!-- (Optional) Google Analytics 4 -->
-  <!--
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-XXXXXXX');
-  </script>
-  -->
+/* Tiny screens */
+@media (max-width:360px){
+  .header-right{gap:6px}
+  .badge{display:none} /* keep the download button clear on very small screens */
+  .btn-app{padding:9px 10px; font-size:11px}
+  .team{padding:8px}
+  .input{padding:12px}
+  .btn{padding:12px}
+}
+</style>
 </head>
 <body>
-  <div class="blob-a"></div><div class="blob-b"></div>
+<canvas id="sparks"></canvas>
+<canvas id="confetti"></canvas>
 
-  <header>
-    <div class="container nav">
-      <div class="brand"><img src="assets/favicon.png" alt="Cricket Live logo"/><span>Cricket LIVE</span></div>
-      <div class="cta">
-        <a class="btn" href="get-app.html">Get App</a>
-        <a class="btn ghost" href="#showcase">Screens</a>
-        <a class="btn primary pulse" href="https://wa.me/94787336580" rel="nofollow">Order Now</a>
-      </div>
+<div class="app">
+  <div class="header">
+    <div class="logo">
+      <div class="bolt"></div>
+      <div class="brand">Cricket Fire Arena</div>
     </div>
-  </header>
 
-  <section class="hero">
-    <div class="container hero-grid">
-      <div class="hero-card reveal">
-        <h1 class="h1">Buy <span class="grad">Cricket Streaming App</span> with Private API.</h1>
-        <p class="lead">We build your Android & iOS app for <b>$100</b> (₹8,499). Clean UI, fast video, AdMob, push & analytics — plus highlights.</p>
-        <div class="offer">
-          <span class="tag">1 month maintenance free</span>
-          <span class="tag">Private API included</span>
-          <span class="tag hot">Sample APK available</span>
-        </div>
-        <div class="check">
-          <span><i class="tick">✓</i> Live streams (HLS/DASH you have rights to)</span>
-          <span><i class="tick">✓</i> AdMob: banner, interstitial, rewarded</span>
-          <span><i class="tick">✓</i> OneSignal push & in-app messages</span>
-          <span><i class="tick">✓</i> Amplitude + Firebase Analytics</span>
-          <span><i class="tick">✓</i> Highlights via Wistia (10 uploads)</span>
-          <span><i class="tick">✓</i> Store-ready brand assets</span>
-        </div>
-        <div class="cta">
-          <a href="get-app.html" class="btn primary">Download APKs</a>
-          <a href="https://wa.me/94787336580" class="btn">Order on WhatsApp</a>
-        </div>
-        <p class="disclaimer" style="margin-top:10px">Use the API only with streams you have legal rights to. We do not provide TV rights.</p>
-      </div>
-      <div id="showcase" class="showcase reveal" aria-label="Screenshots">
-        <div class="card-media"><img src="assets/showcase-1.webp" alt="Home screen with live matches"/></div>
-        <div class="card-media"><img src="assets/showcase-2.webp" alt="Highlights list and video player"/></div>
-        <div class="card-media"><img src="assets/showcase-3.webp" alt="Notifications and settings"/></div>
-      </div>
+    <!-- Right: Badge + Download App (glowing) -->
+    <div class="header-right">
+      <div class="badge">BAN vs AFG</div>
+      <a
+        class="btn-app"
+        href="https://app.crickgd.live/get-app.html"
+        aria-label="Download App"
+      >Download App</a>
     </div>
-  </section>
+  </div>
 
-  <div class="stripe container"></div>
-
-  <section class="container reveal" aria-label="Why choose us">
-    <div class="grid-3">
-      <div class="tile">
-        <h3>Own your brand</h3>
-        <p>Control the UI, assets, and content. Run your own live cards and highlight uploads.</p>
-      </div>
-      <div class="tile">
-        <h3>What you get</h3>
-        <p>Android build + assets, AdMob, OneSignal, Amplitude, Firebase, and a private API with purchase.</p>
-      </div>
-      <div class="tile">
-        <h3>Fast delivery</h3>
-        <p>Simple onboarding via WhatsApp. We guide you step by step until your first release.</p>
-      </div>
+  <!-- Arena -->
+  <div class="card pitch">
+    <div class="title">For the win prize: select today’s winning team</div>
+    <div class="vs-wrap">
+      <div class="flame"></div>
+      <div class="vs">VS</div>
     </div>
-  </section>
 
-  <div class="stripe container"></div>
-
-  <section class="container pricing" id="pricing" aria-label="Pricing">
-    <div class="plan reveal">
-      <h2 style="margin:0">Full App Build</h2>
-      <div class="price">$100 (₹8,499)</div>
-      <ul class="incl">
-        <li>Android + branding, icons, theming</li>
-        <li>AdMob, OneSignal, Analytics setup</li>
-        <li>Highlights (Wistia 10 videos)</li>
-        <li><b>Private API</b> access included</li>
-        <li>1 month maintenance free</li>
-      </ul>
-      <div class="cta">
-        <a class="btn primary" href="https://wa.me/94787336580">Order on WhatsApp</a>
-        <a class="btn ghost" href="get-app.html">Try Sample APK</a>
+    <div class="teams">
+      <div class="team" id="team-ban" data-team="BAN">
+        <div class="flag ban"></div>
+        <h3 style="color:#7dffd5">Bangladesh</h3>
       </div>
-    </div>
-    <div class="plan reveal">
-      <h2 style="margin:0">Monthly API Plan</h2>
-      <div class="price">$10 / month (₹850)</div>
-      <ul class="incl">
-        <li>Use the private API with your app</li>
-        <li>Live card & slider management</li>
-        <li>Manual highlight uploads</li>
-        <li>Basic usage dashboard</li>
-      </ul>
-      <p class="disclaimer">No free trial. Cancel anytime.</p>
-    </div>
-  </section>
-
-  <div class="sticky-cta" role="region" aria-label="Sticky call to action">
-    <div class="container inner">
-      <div><b>Ready?</b> Build your own app + API.</div>
-      <div class="cta">
-        <a class="btn primary" href="https://wa.me/94787336580">Order Now</a>
-        <a class="btn ghost" href="get-app.html">Sample APK</a>
+      <div></div>
+      <div class="team" id="team-afg" data-team="AFG">
+        <div class="flag afg"></div>
+        <h3 style="color:#ff9aa6">Afghanistan</h3>
       </div>
     </div>
   </div>
 
-  <a class="float-wa" href="https://wa.me/94787336580" aria-label="Chat on WhatsApp">Chat on WhatsApp</a>
+  <!-- CTA -->
+  <div class="cta">
+    <button class="btn" id="claimBtn" disabled>Claim Prize</button>
+    <button class="mini" id="resetBtn">Reset</button>
+  </div>
+  <p class="copy" id="status">Say for the win price: select team → claim prize card → enter name & email.</p>
 
-  <footer class="container">
-    <div class="stripe"></div>
-    <div>© 2025 Cricket Live. For demonstration and marketing only.</div>
-  </footer>
+  <!-- Crowd bar (sample 60/40) -->
+  <div class="crowd">
+    <div class="label"><span>Bangladesh</span><span>Afghanistan</span></div>
+    <div class="bar" aria-label="Crowd prediction">
+      <div class="seg-ban" id="banSeg" style="width:60%"></div>
+      <div class="seg-afg" id="afgSeg" style="width:40%"></div>
+    </div>
+    <div class="label" style="margin-top:4px"><strong>60%</strong><span></span><strong>40%</strong></div>
+  </div>
 
-  <script>
-    // simple reveal-on-scroll
-    const els = document.querySelectorAll('.reveal');
-    const io = new IntersectionObserver((entries)=> {
-      entries.forEach(e => e.isIntersecting && e.target.classList.add('in'));
-    }, {threshold:.12});
-    els.forEach(el => io.observe(el));
-  </script>
+  <!-- Shadow Prize -->
+  <div class="gift">
+    <div class="row">
+      <div class="box"></div>
+      <div class="info">
+        <strong>Shadow Prize (Hidden)</strong>
+        <small>After this match, if your selected team wins, you may be randomly chosen for the prize.</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="dash" id="dash" style="display:none">
+    <div class="card">
+      <h4>🎯 Your Claim</h4>
+      <div class="entry">
+        <div>
+          <div style="font-weight:1000" id="entryTitle">BAN vs AFG — Your Entry</div>
+          <div style="font-size:12px; color:#ffd7a1" id="entryMeta">—</div>
+        </div>
+        <div class="chip" id="entryStatus">Pending</div>
+      </div>
+      <p class="copy" style="margin:8px 0 0">
+        We will contact you after winning this match — if your team wins, you have been randomly selected to the prize.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Claim Sheet -->
+<div class="modal" id="claimModal">
+  <div class="sheet">
+    <h3>Claim Prize Entry</h3>
+    <div class="field">
+      <span class="label">Selected Team</span>
+      <input class="input" id="teamField" readonly>
+    </div>
+    <div class="field">
+      <span class="label">Your Name</span>
+      <input class="input" id="name" placeholder="Your name" required>
+    </div>
+    <div class="field">
+      <span class="label">Email</span>
+      <input class="input" id="email" type="email" inputmode="email" placeholder="you@example.com" required>
+    </div>
+    <button class="submit" id="submitClaim">Submit Claim</button>
+  </div>
+</div>
+
+<!-- Success Toast -->
+<div class="toast" id="toast">Claim submitted successfully!</div>
+
+<script>
+(()=> {
+  /* Elements */
+  const ban = document.getElementById('team-ban');
+  const afg = document.getElementById('team-afg');
+  const claimBtn = document.getElementById('claimBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const status = document.getElementById('status');
+
+  const claimModal = document.getElementById('claimModal');
+  const teamField = document.getElementById('teamField');
+  const submitClaim = document.getElementById('submitClaim');
+  const toast = document.getElementById('toast');
+
+  const dash = document.getElementById('dash');
+  const entryTitle = document.getElementById('entryTitle');
+  const entryMeta = document.getElementById('entryMeta');
+  const entryStatus = document.getElementById('entryStatus');
+
+  const storageKey = 'fire_arena_ban_afg_v2';
+  let selection = null;
+
+  /* Restore */
+  try {
+    const saved = JSON.parse(localStorage.getItem(storageKey) || 'null');
+    if (saved && saved.locked) {
+      selection = saved.team;
+      highlight();
+      claimBtn.disabled = true;
+      disableTeams();
+      fillDashboard(saved);
+      status.textContent = `Entry locked for ${label(saved.team)}.`;
+    }
+  } catch(e){}
+
+  function label(code){ return code === 'BAN' ? 'Bangladesh' : 'Afghanistan'; }
+
+  ban.addEventListener('click', ()=> pick('BAN'));
+  afg.addEventListener('click', ()=> pick('AFG'));
+
+  function pick(team){
+    if(isLocked()) return;
+    selection = team; highlight();
+    claimBtn.disabled = false;
+    status.textContent = `For the win price: ${label(team)} selected. Tap “Claim Prize”.`;
+    ringFlare(); sparkBurst(innerWidth/2, innerHeight*0.38);
+  }
+
+  function highlight(){
+    const isBAN = selection === 'BAN';
+    ban.classList.toggle('active', isBAN);
+    afg.classList.toggle('active', !isBAN);
+    ban.classList.toggle('glow',   isBAN);
+    afg.classList.toggle('glow',   !isBAN);
+  }
+  function disableTeams(){
+    ban.style.pointerEvents='none'; afg.style.pointerEvents='none';
+    ban.style.opacity=.75; afg.style.opacity=.75;
+  }
+  function enableTeams(){
+    ban.style.pointerEvents='auto'; afg.style.pointerEvents='auto';
+    ban.style.opacity=1; afg.style.opacity=1;
+  }
+  function isLocked(){
+    const s = JSON.parse(localStorage.getItem(storageKey) || 'null');
+    return !!(s && s.locked);
+  }
+
+  /* Modals */
+  claimBtn.addEventListener('click', ()=>{
+    if(!selection){ status.textContent='Select a team first.'; return; }
+    teamField.value = label(selection);
+    openModal(claimModal);
+  });
+  submitClaim.addEventListener('click', ()=>{
+    const name = (document.getElementById('name').value || '').trim();
+    const email = (document.getElementById('email').value || '').trim();
+    if(!name || !email) return;
+
+    const payload = { locked:true, team:selection, name, email, ts:Date.now(), result:'pending' };
+    localStorage.setItem(storageKey, JSON.stringify(payload));
+
+    closeModal(claimModal);
+    showToast('Claim submitted successfully!');
+    confettiBurst();
+    claimBtn.disabled = true; disableTeams();
+    status.textContent = "We will contact you after winning this match — your team may be randomly selected to the prize.";
+    fillDashboard(payload);
+  });
+
+  resetBtn.addEventListener('click', ()=>{
+    localStorage.removeItem(storageKey);
+    selection = null; highlight();
+    claimBtn.disabled = true;
+    enableTeams();
+    status.textContent = 'Say for the win price: select team → claim prize card → enter name & email.';
+    dash.style.display='none';
+  });
+
+  function fillDashboard(data){
+    dash.style.display='block';
+    entryTitle.textContent = 'BAN vs AFG — Your Entry';
+    entryMeta.textContent = `Team: ${label(data.team)} • Name: ${data.name} • Email: ${data.email}`;
+    entryStatus.textContent = 'Pending';
+    entryStatus.classList.remove('ok');
+  }
+
+  function openModal(el){ el.classList.add('open'); document.body.style.overflow='hidden'; }
+  function closeModal(el){ el.classList.remove('open'); document.body.style.overflow=''; }
+  function showToast(text){ toast.textContent=text; toast.style.display='block'; setTimeout(()=> toast.style.display='none', 1900); }
+
+  /* VS pulse flare */
+  function ringFlare(){
+    const vs = document.querySelector('.vs');
+    vs.animate([
+      { transform:'scale(1)', boxShadow:'0 0 0 10px rgba(255,115,28,.12), 0 0 32px rgba(255,45,85,.25), inset 0 0 12px rgba(0,0,0,.6)' },
+      { transform:'scale(1.06)', boxShadow:'0 0 0 14px rgba(255,115,28,.2), 0 0 56px rgba(255,45,85,.4), inset 0 0 18px rgba(0,0,0,.7)' }
+    ], { duration:420, iterations:1, easing:'ease-out' });
+  }
+
+  /* Sparks (fire vibe) */
+  const sparks = document.getElementById('sparks');
+  const sctx = sparks.getContext('2d');
+  function sresize(){ sparks.width = innerWidth; sparks.height = innerHeight }
+  addEventListener('resize', sresize); sresize();
+  let parts = [];
+  function sparkBurst(x,y){
+    for(let i=0;i<40;i++){
+      parts.push({
+        x, y,
+        vx:(Math.random()-0.5)*3, vy:(Math.random()-1.2)*4-1.5,
+        g:0.12, life: Math.random()*40+30, size: Math.random()*2+1,
+        color: Math.random()<0.5 ? '#ffcc7a' : '#ff6a00'
+      });
+    }
+    if(parts.length===40) requestAnimationFrame(sloop);
+  }
+  function sloop(){
+    sctx.clearRect(0,0,sparks.width,sparks.height);
+    parts.forEach(p=>{
+      p.vy += p.g; p.x += p.vx; p.y += p.vy; p.life--;
+      sctx.globalAlpha = Math.max(0, p.life/70);
+      sctx.fillStyle = p.color; sctx.fillRect(p.x, p.y, p.size, p.size);
+    });
+    parts = parts.filter(p=>p.life>0);
+    if(parts.length) requestAnimationFrame(sloop);
+    else sctx.clearRect(0,0,sparks.width,sparks.height);
+  }
+
+  /* Confetti on submit */
+  const conf = document.getElementById('confetti');
+  const cctx = conf.getContext('2d');
+  function cresize(){ conf.width = innerWidth; conf.height = innerHeight }
+  addEventListener('resize', cresize); cresize();
+  let confs = [], raf;
+  function confettiBurst(){
+    confs = [];
+    for(let i=0;i<120;i++){
+      confs.push({
+        x: innerWidth/2, y: innerHeight*0.28,
+        vx:(Math.random()-0.5)*6, vy: -Math.random()*6-2,
+        g:0.12, s: Math.random()*4+2, a:1,
+        c: Math.random()<.33 ? '#ffcc7a' : (Math.random()<.5 ? '#ff6a00' : '#ff2d55')
+      });
+    }
+    cancelAnimationFrame(raf); cloop();
+    setTimeout(()=>{ confs=[] }, 1500);
+  }
+  function cloop(){
+    cctx.clearRect(0,0,conf.width,conf.height);
+    for(const p of confs){
+      p.vy += p.g; p.x += p.vx; p.y += p.vy; p.a -= 0.01;
+      cctx.globalAlpha = Math.max(0,p.a);
+      cctx.fillStyle = p.c;
+      cctx.fillRect(p.x, p.y, p.s, p.s);
+    }
+    cctx.globalAlpha = 1;
+    if(confs.length) raf = requestAnimationFrame(cloop);
+  }
+})();
+</script>
 </body>
 </html>
