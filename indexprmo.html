@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cricket Betting Championship - Win Big!</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Roboto:wght@400;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <script src="https://unpkg.com/splitting@1.0.6/dist/splitting.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/splitting@1.0.6/dist/splitting.css">
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.3.2/pixi.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        :root {
+            --primary-navy: #0a0e27;
+            --electric-blue: #00d4ff;
+            --neon-green: #39ff14;
+            --hot-pink: #ff1493;
+            --gold: #ffd700;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--primary-navy) 0%, #000000 100%);
+            font-family: 'Roboto', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .comic-text {
+            font-family: 'Bangers', cursive;
+            text-shadow: 3px 3px 0px #000, 
+                         -1px -1px 0px #000,  
+                         1px -1px 0px #000,
+                         -1px 1px 0px #000,
+                         1px 1px 0px #000;
+        }
+        
+        .glow-text {
+            text-shadow: 0 0 10px var(--electric-blue),
+                         0 0 20px var(--electric-blue),
+                         0 0 30px var(--electric-blue);
+        }
+        
+        .neon-border {
+            border: 2px solid var(--electric-blue);
+            box-shadow: 0 0 10px var(--electric-blue),
+                        inset 0 0 10px rgba(0, 212, 255, 0.1);
+        }
+        
+        .pulse-glow {
+            animation: pulseGlow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes pulseGlow {
+            from {
+                box-shadow: 0 0 20px var(--neon-green),
+                           0 0 30px var(--neon-green),
+                           0 0 40px var(--neon-green);
+            }
+            to {
+                box-shadow: 0 0 30px var(--neon-green),
+                           0 0 40px var(--neon-green),
+                           0 0 50px var(--neon-green);
+            }
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .rotating {
+            animation: rotating 10s linear infinite;
+        }
+        
+        @keyframes rotating {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .explosion {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .explosion::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+            opacity: 0.3;
+            animation: explode 2s ease-out infinite;
+        }
+        
+        @keyframes explode {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(1); opacity: 0; }
+        }
+        
+        .nav-bottom {
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 2px solid var(--electric-blue);
+        }
+        
+        .match-card {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(57, 255, 20, 0.1) 100%);
+            border: 1px solid var(--electric-blue);
+            transition: all 0.3s ease;
+        }
+        
+        .match-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+        
+        .prize-box {
+            background: linear-gradient(135deg, var(--gold) 0%, #ffed4e 100%);
+            border: 3px solid var(--gold);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+        
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="text-white min-h-screen">
+    <!-- Background Particles -->
+    <canvas id="particles-canvas"></canvas>
+    
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex flex-col justify-center items-center px-4 py-8">
+        <!-- Hero Image -->
+        <div class="absolute inset-0 z-0">
+            <img src="hero-cricket.png" alt="Cricket Hero" class="w-full h-full object-cover opacity-50">
+        </div>
+        
+        <!-- Hero Content -->
+        <div class="relative z-10 text-center max-w-4xl mx-auto">
+            <!-- Main Title -->
+            <h1 class="comic-text text-4xl md:text-6xl lg:text-7xl mb-6 glow-text">
+                <span id="typed-title"></span>
+            </h1>
+            
+            <!-- Subtitle -->
+            <p class="text-lg md:text-xl mb-8 text-gray-200 max-w-2xl mx-auto">
+                Join the ultimate cricket betting championship and win big! 
+                Download our app now and get exclusive access to live matches.
+            </p>
+            
+            <!-- Download Button Section -->
+            <div class="mb-12">
+                <button id="download-btn" class="explosion bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold py-4 px-8 rounded-full text-xl md:text-2xl neon-border pulse-glow transform hover:scale-105 transition-all duration-300 mb-4">
+                    📱 DOWNLOAD APP NOW
+                </button>
+                
+                <div class="text-sm text-gray-300">
+                    ✅ Available on Android & iOS
+                </div>
+            </div>
+            
+            <!-- Stats -->
+            <div class="grid grid-cols-3 gap-4 max-w-md mx-auto">
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-yellow-400" id="users-count">0</div>
+                    <div class="text-xs text-gray-400">Active Users</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-green-400" id="prizes-count">0</div>
+                    <div class="text-xs text-gray-400">Prizes Won</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-blue-400" id="matches-count">0</div>
+                    <div class="text-xs text-gray-400">Live Matches</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Prize Showcase Section -->
+    <section class="py-16 px-4">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="comic-text text-3xl md:text-5xl text-center mb-12 glow-text">
+                💰 WIN AMAZING PRIZES! 💰
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <!-- Prize Box 1 -->
+                <div class="prize-box rounded-lg p-6 text-center floating">
+                    <div class="text-4xl mb-4">🏆</div>
+                    <h3 class="comic-text text-2xl text-black mb-2">GRAND PRIZE</h3>
+                    <div class="text-3xl font-bold text-black mb-2">$10,000</div>
+                    <p class="text-sm text-gray-800">Cash Prize</p>
+                </div>
+                
+                <!-- Prize Box 2 -->
+                <div class="prize-box rounded-lg p-6 text-center floating" style="animation-delay: 0.5s;">
+                    <div class="text-4xl mb-4">🥇</div>
+                    <h3 class="comic-text text-2xl text-black mb-2">GOLD PRIZE</h3>
+                    <div class="text-3xl font-bold text-black mb-2">$5,000</div>
+                    <p class="text-sm text-gray-800">Instant Cash</p>
+                </div>
+                
+                <!-- Prize Box 3 -->
+                <div class="prize-box rounded-lg p-6 text-center floating" style="animation-delay: 1s;">
+                    <div class="text-4xl mb-4">💎</div>
+                    <h3 class="comic-text text-2xl text-black mb-2">DIAMOND PRIZE</h3>
+                    <div class="text-3xl font-bold text-black mb-2">$2,500</div>
+                    <p class="text-sm text-gray-800">Lucky Draw</p>
+                </div>
+            </div>
+            
+            <!-- Call to Action -->
+            <div class="text-center">
+                <h3 class="comic-text text-2xl md:text-3xl mb-6 glow-text">
+                    Want to win these prizes? 
+                </h3>
+                <p class="text-lg mb-8 text-gray-300">
+                    Go to matches and bid on your favorite teams!
+                </p>
+                <button onclick="window.location.href='matches.html'" class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 px-6 rounded-full text-lg neon-border transform hover:scale-105 transition-all duration-300">
+                    🏏 VIEW MATCHES
+                </button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Quick Matches Preview -->
+    <section class="py-16 px-4">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="comic-text text-3xl md:text-5xl text-center mb-12 glow-text">
+                🔥 LIVE MATCHES NOW! 🔥
+            </h2>
+            
+            <div class="splide" id="matches-carousel">
+                <div class="splide__track">
+                    <ul class="splide__list">
+                        <!-- Match Card 1 -->
+                        <li class="splide__slide">
+                            <div class="match-card rounded-lg p-6 mx-2">
+                                <div class="text-center mb-4">
+                                    <div class="text-sm text-gray-400 mb-2">1st ODI • TODAY</div>
+                                    <div class="flex justify-between items-center">
+                                        <div class="text-center">
+                                            <div class="text-2xl mb-2">🇦🇫</div>
+                                            <div class="font-bold">AFG</div>
+                                        </div>
+                                        <div class="text-2xl font-bold text-red-400">VS</div>
+                                        <div class="text-center">
+                                            <div class="text-2xl mb-2">🇧🇩</div>
+                                            <div class="font-bold">BAN</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-sm text-gray-400">Win Predictor</div>
+                                    <div class="flex justify-between text-xs mt-1">
+                                        <span>45%</span>
+                                        <span>55%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        
+                        <!-- Match Card 2 -->
+                        <li class="splide__slide">
+                            <div class="match-card rounded-lg p-6 mx-2">
+                                <div class="text-center mb-4">
+                                    <div class="text-sm text-gray-400 mb-2">Test Series • Oct 10</div>
+                                    <div class="flex justify-between items-center">
+                                        <div class="text-center">
+                                            <div class="text-2xl mb-2">🇮🇳</div>
+                                            <div class="font-bold">IND</div>
+                                        </div>
+                                        <div class="text-2xl font-bold text-red-400">VS</div>
+                                        <div class="text-center">
+                                            <div class="text-2xl mb-2">🇼🇮</div>
+                                            <div class="font-bold">WI</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-sm text-gray-400">Win Predictor</div>
+                                    <div class="flex justify-between text-xs mt-1">
+                                        <span>65%</span>
+                                        <span>35%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        
+                        <!-- Match Card 3 -->
+                        <li class="splide__slide">
+                            <div class="match-card rounded-lg p-6 mx-2">
+                                <div class="text-center mb-4">
+                                    <div class="text-sm text-gray-400 mb-2">T20 • Oct 11</div>
+                                    <div class="flex justify-between items-center">
+                                        <div class="text-center">
+                                            <div class="text-2xl mb-2">🇳🇦</div>
+                                            <div class="font-bold">NAM</div>
+                                        </div>
+                                        <div class="text-2xl font-bold text-red-400">VS</div>
+                                        <div class="text-center">
+                                            <div class="text-2xl mb-2">🇿🇦</div>
+                                            <div class="font-bold">SA</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-sm text-gray-400">Win Predictor</div>
+                                    <div class="flex justify-between text-xs mt-1">
+                                        <span>25%</span>
+                                        <span>75%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="text-center mt-8">
+                <button onclick="window.location.href='matches.html'" class="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-3 px-6 rounded-full text-lg neon-border transform hover:scale-105 transition-all duration-300">
+                    View All Matches →
+                </button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Bottom Navigation -->
+    <nav class="nav-bottom fixed bottom-0 left-0 right-0 z-50">
+        <div class="flex justify-around items-center py-3">
+            <button class="flex flex-col items-center text-blue-400">
+                <div class="text-xl mb-1">🏠</div>
+                <span class="text-xs">Home</span>
+            </button>
+            <button onclick="window.location.href='matches.html'" class="flex flex-col items-center text-gray-400 hover:text-blue-400 transition-colors">
+                <div class="text-xl mb-1">🏏</div>
+                <span class="text-xs">Matches</span>
+            </button>
+            <button onclick="window.location.href='leaderboard.html'" class="flex flex-col items-center text-gray-400 hover:text-blue-400 transition-colors">
+                <div class="text-xl mb-1">🏆</div>
+                <span class="text-xs">Winners</span>
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Add bottom padding to prevent content being hidden behind nav -->
+    <div class="h-20"></div>
+    
+    <script src="main.js"></script>
+</body>
+</html>
