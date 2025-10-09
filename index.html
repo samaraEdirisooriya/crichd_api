@@ -82,7 +82,7 @@ function render(){
     const card = document.createElement('div'); card.className = 'card';
     card.innerHTML = `
       <div class="hdr">
-        <div><strong>#${idx+1}</strong> &nbsp; <span class="id">${it.mid}</span></div>
+        <div><strong>#${idx+1}</strong> &nbsp; <span ></span></div>
         <div class="ttl">Expires: ${new Date(it.exp*1000).toLocaleString()} &nbsp; <span class="count" id="ttl-${idx}">${fmtTTL(remain)}</span></div>
       </div>
       <div class="token"><code id="tok-${idx}">${it.token}</code></div>
