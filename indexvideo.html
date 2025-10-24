@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Wistia Token Generator (Admin, 30-min)</title>
+<style>
+  :root{--bg:#0b0f17;--ink:#eef3ff;--muted:#9fb0c9;--card:#0f1726;--b:#21324d;--accent:#ff7a1a}
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,Inter,Roboto,Arial}
+  .wrap{max-width:980px;margin:28px auto;padding:0 14px}
+  h1{margin:0 0 10px;font-weight:800}
+  .muted{color:var(--muted)}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+  button{background:#16233d;border:1px solid var(--b);color:#dfe8ff;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
+  .grid{display:grid;gap:12px;margin-top:12px}
+  .card{background:var(--card);border:1px solid var(--b);border-radius:12px;padding:12px}
+  .hdr{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+  .id{font-family:ui-monospace,Consolas,monospace;background:#0d1424;border:1px solid var(--b);padding:4px 8px;border-radius:8px}
+  .ttl{color:#bfe5ff;font-size:13px}
+  .token{margin-top:8px;word-break:break-all;background:#0b1222;border:1px dashed #2a3a5c;border-radius:8px;padding:8px}
+  .count{font-variant-numeric:tabular-nums}
+  @media (max-width:600px){ .hdr{gap:6px} }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Wistia Token Generator</h1>
+    <div class="muted">Admin-only. Tokens expire in <span id="expMins">30</span> minutes. Edit variables in source.</div>
+
+    <div class="row">
+      <button id="regen">Regenerate new tokens</button>
+      <button id="copyAll">Copy all tokens</button>
+    </div>
+
+    <div id="list" class="grid"></div>
+  </div>
+
+<script>
+/*** ====== EDIT THESE VARIABLES ====== ***/
+const SECRET = 'CHANGE_ME_LONG_RANDOM_SECRET';    // <— your secret (keep private)
+const MEDIA_IDS = [
+  'vm72ggm90a',
+  'vgept6tim5'
+  // add more: 'abc123xyz', ...
+];
+const EXP_MINUTES = 30; // token validity
+/*** =================================== ***/
+
+document.getElementById('expMins').textContent = EXP_MINUTES;
+
+function b64u(bytes){ const bin=String.fromCharCode(...new Uint8Array(bytes)); return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
+function b64uStr(s){ return b64u(new TextEncoder().encode(s)); }
+async function hmacSign(keyStr, dataStr){
+  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(keyStr), {name:'HMAC', hash:'SHA-256'}, false, ['sign']);
+  const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(dataStr));
+  return new Uint8Array(sig);
+}
+async function genToken(secret, mid, mins=30){
+  const now = Math.floor(Date.now()/1000);
+  const payload = { mid, iat: now, exp: now + mins*60 };
+  const p64 = b64uStr(JSON.stringify(payload));
+  const sig = await hmacSign(secret, p64);
+  return { mid, iat: payload.iat, exp: payload.exp, token: `${p64}.${b64u(sig)}` };
+}
+
+let items = []; let tickTimer = null;
+
+function fmtTTL(sec){
+  if (sec <= 0) return 'expired';
+  const m = Math.floor(sec/60), s = sec%60;
+  return `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')} min`;
+}
+
+function render(){
+  const list = document.getElementById('list');
+  list.innerHTML = '';
+  const frag = document.createDocumentFragment();
+  const now = Math.floor(Date.now()/1000);
+
+  items.forEach((it, idx)=>{
+    const remain = Math.max(0, it.exp - now);
+    const card = document.createElement('div'); card.className = 'card';
+    card.innerHTML = `
+      <div class="hdr">
+        <div><strong>#${idx+1}</strong> &nbsp; <span ></span></div>
+        <div class="ttl">Expires: ${new Date(it.exp*1000).toLocaleString()} &nbsp; <span class="count" id="ttl-${idx}">${fmtTTL(remain)}</span></div>
+      </div>
+      <div class="token"><code id="tok-${idx}">${it.token}</code></div>
+      <div class="row">
+        <button data-copy="${idx}">Copy</button>
+      </div>
+    `;
+    frag.appendChild(card);
+  });
+  list.appendChild(frag);
+
+  list.querySelectorAll('button[data-copy]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const i = Number(btn.dataset.copy);
+      const t = document.getElementById(`tok-${i}`).textContent;
+      navigator.clipboard.writeText(t).then(()=>{ btn.textContent='Copied'; setTimeout(()=>btn.textContent='Copy',900); });
+    });
+  });
+}
+
+function startTick(){
+  if (tickTimer) clearInterval(tickTimer);
+  tickTimer = setInterval(()=>{
+    const now = Math.floor(Date.now()/1000);
+    items.forEach((it, idx)=>{
+      const el = document.getElementById(`ttl-${idx}`);
+      if (!el) return;
+      el.textContent = fmtTTL(Math.max(0, it.exp - now));
+    });
+  }, 1000);
+}
+
+async function regenerate(){
+  const out = [];
+  for (const mid of MEDIA_IDS){
+    out.push(await genToken(SECRET, mid, EXP_MINUTES));
+  }
+  items = out;
+  render();
+  startTick();
+}
+
+document.getElementById('regen').addEventListener('click', regenerate);
+document.getElementById('copyAll').addEventListener('click', ()=>{
+  const all = items.map(x=>x.token).join('\n');
+  if (!all) return alert('No tokens yet');
+  navigator.clipboard.writeText(all).then(()=>alert('All tokens copied'));
+});
+
+// initial
+regenerate();
+</script>
+</body>
+</html>
